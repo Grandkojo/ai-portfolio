@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🌌 The Void Alchemist | Next.js AI Portfolio
 
-## Getting Started
+![Hero Section](imgs/portfolio_hero.png)
 
-First, run the development server:
+A "Void Alchemist" themed portfolio built with **Next.js 14**, **Tailwind CSS**, and **Framer Motion**, featuring a context-aware **AI Chatbot powered by Google Gemini** (RAG-enabled) and deployed on **Google Cloud Run**.
 
+> *"I build systems that think."*
+
+## ✨ Features
+
+- **🔮 Void Alchemist Aesthetic**: Deep "Obsidian" dark mode with neon cyan accents, glassmorphism, floating code sigils, and a multi-layered atmospheric background.
+- **🧠 AI Agent Integration**:
+  - Powered by **Google Gemini 1.5 Flash**.
+  - **RAG System**: The AI reads this repo's documentation to answer specific questions about my projects and architecture.
+  - Generative UI: Can analyze resumes or project ideas on the fly.
+  - Crystal Orb Interface: A futuristic, animated trigger button.
+- **🎭 Cinematic UI**:
+  - Translucent "Atmosphere Layer" for depth.
+  - "Torch Cursor" effect tracking mouse movement.
+  - Film Grain and Vignette overlays.
+- **📨 Functional Contact Form**:
+  - Integrated with **Web3Forms**.
+  - Custom "Neon Green" success/error notifications.
+- **☁️ Cloud-Native**:
+  - Containerized with Docker (multi-stage build).
+  - Deployed on **Google Cloud Run** for serverless scaling.
+
+![Chatbot Interface](imgs/portfolio_chatbot.png)
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Animation**: [Framer Motion](https://www.framer.com/motion/)
+- **AI**: [Google Generative AI SDK](https://www.npmjs.com/package/@google/generative-ai) (Gemini)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Forms**: [Web3Forms](https://web3forms.com/)
+- **Deployment**: Google Cloud Run (Docker)
+
+## 🚀 Getting Started
+
+### 1. Clone & Install
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/yourusername/ai-portfolio.git
+cd ai-portfolio
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Environment Variables
+Create a `.env.local` file in the root:
+```bash
+# Google AI Studio Key
+GEMINI_API_KEY=your_gemini_api_key_here
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Web3Forms Access Key (for contact form)
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_key_here
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# App URL (Production)
+NEXT_PUBLIC_APP_URL=https://your-cloud-run-url.run.app
+```
 
-## Learn More
+### 3. Run Locally
+```bash
+npm run dev
+```
+Visit `http://localhost:3000`.
 
-To learn more about Next.js, take a look at the following resources:
+## ☁️ Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+This project includes a **one-click deployment script** for Google Cloud Run.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Prerequisites
+- Google Cloud SDK (`gcloud`) installed and authenticated.
+- A Google Cloud Project with billing enabled.
 
-## Deploy on Vercel
+### Deploying
+The `deploy.sh` script automates enabling APIs, building the container, deploying to Cloud Run, and cleaning up old image versions to save costs.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+chmod +x deploy.sh
+./deploy.sh
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> **Note**: The script loads environment variables automatically from `.env.local`.
+
+![Journey Section](imgs/portfolio_journey.png)
+
+## 📂 Project Structure
+
+```
+├── app/
+│   ├── actions.ts       # Server Actions (Gemini RAG Logic)
+│   ├── layout.tsx       # Global UI (Floating Sigils, Grain, Atmosphere)
+│   └── page.tsx         # Main Landing Page
+├── components/
+│   ├── atmosphere-layer.tsx # Translucent depth effect
+│   ├── chatbot.tsx      # AI Assistant UI
+│   ├── contact.tsx      # Web3Forms Integration
+│   ├── floating-sigils.tsx # Background Animation
+│   └── footer.tsx       # System Status & Links
+├── lib/
+│   ├── project-docs/    # Markdown files for RAG context
+│   └── portfolio-data.ts# Static data (Experience, Projects)
+├── deploy.sh            # Deployment Automation
+└── Dockerfile           # Production Image Config
+```
+
+## 🏆 Credits
+
+Built by **Ernest Kojo Owusu Essien** for the **Google AI "New Year, New You" Challenge**.
