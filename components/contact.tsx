@@ -12,13 +12,42 @@ export function ContactSection() {
     const github = "https://github.com/Grandkojo";
     const linkedin = "https://www.linkedin.com/in/ernest-essien-kojo";
 
+    function getInputValue(hname: string): string {
+        const elements = document.getElementsByName(hname);
+        const el = elements[0];
+
+        if (!el) {
+            throw new Error(`Element with name "${hname}" not found`);
+        }
+
+        if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            return el.value;
+        }
+
+        throw new Error(`Element with name "${hname}" is not an input or textarea`);
+    }
+
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setStatus("submitting");
+        const access_key = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+        const subject = getInputValue("subject");
+        const name = getInputValue("name");
+        const email = getInputValue("email");
+        const message = getInputValue("message");
+        const phone = getInputValue("phone");
 
-        const formData = new FormData(e.currentTarget);
-        const object = Object.fromEntries(formData);
+        const object = {
+            access_key,
+            subject,
+            name,
+            email,
+            message,
+            phone
+        };
+
         const json = JSON.stringify(object);
+
 
         try {
             const response = await fetch("https://api.web3forms.com/submit", {
@@ -135,7 +164,7 @@ export function ContactSection() {
                     ) : (
                         <form onSubmit={handleSubmit} className="space-y-6 relative z-10">
                             {/* Web3Forms Hidden Fields */}
-                            <input type="hidden" name="access_key" value={process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY} />
+                            <input type="hidden" name="access_key" value="" />
                             <input type="hidden" name="subject" value="New Portfolio Submission" />
                             <input type="checkbox" name="botcheck" className="hidden" style={{ display: 'none' }} />
 

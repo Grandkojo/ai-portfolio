@@ -1,6 +1,7 @@
 "use client";
 
 import { Github, Linkedin, Twitter, Terminal, CheckCircle2, ArrowUp } from "lucide-react";
+import { VisitCounter } from "@/components/visit-counter";
 
 export function Footer() {
     const scrollToTop = () => {
@@ -57,7 +58,10 @@ export function Footer() {
 
                 {/* Bottom Bar */}
                 <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-xs text-white/30 text-center md:text-left">&copy; {new Date().getFullYear()} Ernest Kojo Owusu Essien. All rights reserved.</p>
+                    <div className="flex flex-col md:flex-row items-center gap-4">
+                        <p className="text-xs text-white/30 text-center md:text-left">&copy; {new Date().getFullYear()} Ernest Kojo Owusu Essien. All rights reserved.</p>
+                        <VisitCounter />
+                    </div>
 
                     <button
                         onClick={scrollToTop}

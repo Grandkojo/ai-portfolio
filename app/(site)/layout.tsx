@@ -6,7 +6,7 @@ import { FloatingSigils } from "@/components/floating-sigils";
 import { AtmosphereLayer } from "@/components/atmosphere-layer";
 import { CosmicFacts } from "@/components/cosmic-facts";
 import { Footer } from "@/components/footer";
-import "./globals.css";
+import "../globals.css";
 
 const outfit = Outfit({
   subsets: ["latin"],
