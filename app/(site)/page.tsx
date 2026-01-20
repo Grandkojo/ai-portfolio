@@ -2,6 +2,8 @@
 
 import { Hero } from "@/components/hero";
 import { ProjectsGrid } from "@/components/projects-grid";
+import { SkillsSection } from "@/components/skills-section";
+import { EducationSection } from "@/components/education-section";
 import { Chatbot } from "@/components/chatbot";
 import { ExperienceTimeline } from "@/components/experience-timeline";
 import { ContactSection } from "@/components/contact";
@@ -21,6 +23,9 @@ export default function Home() {
     <main className="min-h-screen text-foreground selection:bg-primary selection:text-white pb-32 overflow-x-hidden relative">
       <Hero onOpenChat={() => setIsChatOpen(true)} />
       <ProjectsGrid onAskAI={handleAskAI} />
+
+      <SkillsSection />
+      <EducationSection />
 
       <Chatbot
         isOpen={isChatOpen}
@@ -54,4 +59,3 @@ export default function Home() {
     </main>
   );
 }
-

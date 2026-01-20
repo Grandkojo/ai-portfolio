@@ -30,7 +30,7 @@ export function VisitCounter() {
     if (visits === null) return null; // Loading state
 
     return (
-        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-mono text-white/50">
+        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/20 text-xs font-mono text-white/50">
             <Eye size={12} className="text-primary" />
             <span>{visits.toLocaleString()} Visits</span>
         </div>

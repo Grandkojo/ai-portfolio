@@ -107,7 +107,7 @@ export function ContactSection() {
 
                     <div className="space-y-6">
                         <div className="flex items-center gap-4 group cursor-pointer" onClick={copyEmail}>
-                            <div className="w-12 h-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-primary/20 group-hover:border-primary/50 transition-all">
+                            <div className="w-12 h-12 rounded-full bg-white/5 border border-white/20 flex items-center justify-center group-hover:bg-primary/20 group-hover:border-primary/50 transition-all">
                                 <Mail size={20} className="text-white group-hover:text-primary" />
                             </div>
                             <div>
@@ -132,7 +132,7 @@ export function ContactSection() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className="obsidian-card p-8 md:p-12 shadow-2xl relative group"
+                    className="obsidian-card !bg-white/5 p-8 md:p-12 shadow-2xl relative group"
                 >
                     {/* Obsidian Effects */}
                     <div className="obsidian-highlight group-hover:opacity-100" />
@@ -176,7 +176,7 @@ export function ContactSection() {
                                         id="name"
                                         name="name"
                                         required
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20"
+                                        className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20"
                                         placeholder="John Doe"
                                     />
                                 </div>
@@ -187,7 +187,7 @@ export function ContactSection() {
                                         id="phone"
                                         name="phone"
                                         required
-                                        className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20"
+                                        className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20"
                                         placeholder="+1 (555) 000-0000"
                                     />
                                 </div>
@@ -200,7 +200,7 @@ export function ContactSection() {
                                     id="email"
                                     name="email"
                                     required
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20"
+                                    className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20"
                                     placeholder="john@example.com"
                                 />
                             </div>
@@ -212,7 +212,7 @@ export function ContactSection() {
                                     name="message"
                                     required
                                     rows={5}
-                                    className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20 resize-none"
+                                    className="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3.5 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-transparent transition-all placeholder:text-white/20 resize-none"
                                     placeholder="Tell me about your project..."
                                 />
                             </div>
@@ -250,7 +250,7 @@ function SocialButton({ icon, href, label }: { icon: React.ReactNode; href: stri
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all hover:-translate-y-1 group"
+            className="flex items-center gap-3 px-6 py-3 rounded-full bg-white/5 border border-white/20 hover:bg-white/10 hover:border-white/20 transition-all hover:-translate-y-1 group"
         >
             <span className="text-white/70 group-hover:text-white transition-colors">{icon}</span>
             <span className="font-medium text-white">{label}</span>

@@ -8,9 +8,9 @@ const chars = ["⌬", "⎔", "⟁", "✺", "⌘", "⌥", "⏣"];
 function Sigil({ x, y, delay, size, rotationDuration, char }: { x: string; y: string; delay: number; size: number; rotationDuration: number; char: string }) {
     return (
         <motion.div
-            initial={{ opacity: 0.1, scale: 0.5 }}
+            initial={{ opacity: 0.4, scale: 0.8 }} // Start visible
             animate={{
-                opacity: [0.1, 0.4, 0.1],
+                opacity: [0.4, 0.1, 0.4], // Cycle from visible to dim to visible
                 scale: [0.8, 1.2, 0.8],
                 rotate: [0, 360],
                 y: [0, -50]

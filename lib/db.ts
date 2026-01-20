@@ -11,13 +11,39 @@ import {
     increment,
     setDoc,
     getDoc,
-    onSnapshot
+    onSnapshot,
+    writeBatch
 } from "firebase/firestore";
+
+// --- HELPERS ---
+
+export const clearCollection = async (collectionName: string) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        console.log(`MOCK: Clearing collection ${collectionName}`);
+        return;
+    }
+
+    try {
+        const querySnapshot = await getDocs(collection(db, collectionName));
+        const batch = writeBatch(db);
+
+        querySnapshot.forEach((doc) => {
+            batch.delete(doc.ref);
+        });
+
+        await batch.commit();
+        console.log(`Cleared collection: ${collectionName}`);
+    } catch (e) {
+        console.error(`Error clearing collection ${collectionName}:`, e);
+        throw e;
+    }
+};
 
 // --- Types ---
 export interface Project {
     id?: string;
     title: string;
+    subtitle?: string;
     description: string;
     imageUrl: string;
     projectUrl: string;
@@ -28,8 +54,9 @@ export interface Project {
 
 export interface Experience {
     id?: string;
-    role: string;
-    company: string;
+    type: "Experience" | "Education" | "Certification";
+    role: string; // Title / Degree
+    company: string; // Organization / Institution
     period: string;
     location: string;
     description: string[];
@@ -78,18 +105,127 @@ export const incrementVisits = async () => {
 // For now, these are placeholders that would call Firestore. 
 // Since we are waiting for keys, I will add simple "Mock" console logs if keys are missing.
 
+// --- PROJECTS ---
+
 export const addProject = async (data: Project) => {
     if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
         console.log("MOCK: Adding project", data);
         return { id: "mock-id" };
     }
-    return addDoc(collection(db, "projects"), data);
+    try {
+        const docRef = await addDoc(collection(db, "projects"), data);
+        console.log("Firestore: Project added with ID:", docRef.id);
+        return docRef;
+    } catch (e) {
+        console.error("Firestore Error adding project:", e);
+        throw e;
+    }
 };
+
+export const updateProject = async (id: string, data: Partial<Project>) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    const docRef = doc(db, "projects", id);
+    await updateDoc(docRef, data);
+};
+
+export const deleteProject = async (id: string) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    await deleteDoc(doc(db, "projects", id));
+};
+
+export const subscribeToProjects = (callback: (projects: Project[]) => void) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        callback([]);
+        return () => { };
+    }
+
+    // Order by 'order' field ascending
+    const q = query(collection(db, "projects"), orderBy("order", "asc"));
+    return onSnapshot(q, (snapshot) => {
+        const projects = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+        callback(projects);
+    });
+};
+
+// --- EXPERIENCE ---
 
 export const addExperience = async (data: Experience) => {
     if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
         console.log("MOCK: Adding experience", data);
         return { id: "mock-id" };
     }
-    return addDoc(collection(db, "experience"), data);
+    try {
+        const docRef = await addDoc(collection(db, "experience"), data);
+        console.log("Firestore: Experience added with ID:", docRef.id);
+        return docRef;
+    } catch (e) {
+        console.error("Error adding experience:", e);
+        throw e;
+    }
+};
+
+export const updateExperience = async (id: string, data: Partial<Experience>) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    const docRef = doc(db, "experience", id);
+    await updateDoc(docRef, data);
+};
+
+export const deleteExperience = async (id: string) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    await deleteDoc(doc(db, "experience", id));
+};
+
+export const subscribeToExperience = (callback: (experience: Experience[]) => void) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        callback([]);
+        return () => { };
+    }
+
+    const q = query(collection(db, "experience"), orderBy("order", "asc"));
+    return onSnapshot(q, (snapshot) => {
+        const experience = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experience));
+        callback(experience);
+    });
+};
+
+
+// --- SKILLS ---
+
+export interface Skill {
+    id?: string;
+    name: string;
+    category: "Frontend" | "Backend" | "Tools" | "AI/ML" | "Database" | "Other";
+    level: number; // 1-10
+    experience: string; // e.g. "3 years"
+}
+
+export const addSkill = async (data: Skill) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    return addDoc(collection(db, "skills"), data);
+};
+
+export const updateSkill = async (id: string, data: Partial<Skill>) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    const docRef = doc(db, "skills", id);
+    await updateDoc(docRef, data);
+};
+
+export const deleteSkill = async (id: string) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    await deleteDoc(doc(db, "skills", id));
+};
+
+
+
+export const subscribeToSkills = (callback: (skills: Skill[]) => void) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        callback([]);
+        return () => { };
+    }
+    // Order by level descending (highest skill first)
+    const q = query(collection(db, "skills"), orderBy("level", "desc"));
+    return onSnapshot(q, (snapshot) => {
+        const skills = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Skill));
+        callback(skills);
+    });
 };

@@ -49,10 +49,10 @@ export function Chatbot({ isOpen, onClose, initialContext }: { isOpen: boolean; 
                     initial={{ opacity: 0, y: 20, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                    className="fixed bottom-4 left-0 right-0 mx-auto md:left-auto md:right-8 md:bottom-4 md:mx-0 w-[85vw] md:w-[400px] h-[65vh] md:h-[600px] md:max-h-[80vh] bg-[#050505]/95 backdrop-blur-xl rounded-[1.5rem] flex flex-col shadow-2xl z-50 overflow-hidden border border-white/10 ring-1 ring-white/5"
+                    className="fixed bottom-4 left-0 right-0 mx-auto md:left-auto md:right-8 md:bottom-4 md:mx-0 w-[85vw] md:w-[400px] h-[65vh] md:h-[600px] md:max-h-[80vh] bg-[#050505]/95 backdrop-blur-xl rounded-[1.5rem] flex flex-col shadow-2xl z-50 overflow-hidden border border-white/20 ring-1 ring-white/5"
                 >
                     {/* Header */}
-                    <div className="p-4 bg-white/5 backdrop-blur-md flex justify-between items-center border-b border-white/10">
+                    <div className="p-4 bg-white/5 backdrop-blur-md flex justify-between items-center border-b border-white/20">
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 rounded-full bg-primary/20 border border-primary/30 flex items-center justify-center">
                                 <Bot size={18} className="text-primary" />
@@ -142,7 +142,7 @@ export function Chatbot({ isOpen, onClose, initialContext }: { isOpen: boolean; 
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 placeholder="Ask me anything..."
-                                className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-white/30"
+                                className="flex-1 bg-white/5 border border-white/20 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-white/30"
                             />
                             <button
                                 type="submit"

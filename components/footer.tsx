@@ -9,7 +9,7 @@ export function Footer() {
     };
 
     return (
-        <footer className="relative border-t border-white/10 bg-[#050505] z-40 overflow-hidden">
+        <footer className="relative border-t border-white/20 bg-[#050505] z-40 overflow-hidden">
             {/* Background Atmosphere */}
             <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none" />
 
@@ -19,7 +19,7 @@ export function Footer() {
                     {/* Column 1: Identity */}
                     <div className="space-y-4">
                         <div className="flex items-center gap-2 text-white font-bold text-xl tracking-tight">
-                            <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                            <div className="p-2 rounded-lg bg-white/5 border border-white/20">
                                 <Terminal size={20} className="text-primary" />
                             </div>
                             <span>Ernest Kojo Owusu Essien</span>
@@ -65,7 +65,7 @@ export function Footer() {
 
                     <button
                         onClick={scrollToTop}
-                        className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/50 text-white/70 hover:text-white transition-all group text-sm font-medium shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5"
+                        className="flex items-center gap-2 px-6 py-3 rounded-full bg-white/5 border border-white/20 hover:bg-white/10 hover:border-primary/50 text-white/70 hover:text-white transition-all group text-sm font-medium shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5"
                     >
                         <span>Return to Surface</span>
                         <ArrowUp size={16} className="group-hover:-translate-y-1 transition-transform text-primary" />
@@ -82,7 +82,7 @@ function SocialLink({ href, icon, label }: { href: string; icon: React.ReactNode
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white hover:border-primary/50 hover:scale-110 transition-all duration-300 group"
+            className="w-10 h-10 rounded-full bg-white/5 border border-white/20 flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white hover:border-primary/50 hover:scale-110 transition-all duration-300 group"
             title={label}
         >
             {icon}
