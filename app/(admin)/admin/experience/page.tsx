@@ -1,5 +1,6 @@
 "use client";
 
+import { revalidateExperience } from "@/app/actions";
 import { ExperienceForm } from "@/components/admin/experience-form";
 import { deleteExperience, Experience, subscribeToExperience } from "@/lib/db";
 import { Briefcase, Building2, Calendar, Edit2, MapPin, Plus, Trash2 } from "lucide-react";
@@ -18,6 +19,7 @@ export default function AdminExperience() {
     const handleDelete = async (id: string, role: string) => {
         if (confirm(`Are you sure you want to delete "${role}"?`)) {
             await deleteExperience(id);
+            await revalidateExperience();
         }
     };
 
@@ -82,8 +84,8 @@ export default function AdminExperience() {
                                 <div className="flex items-center gap-3">
                                     <h3 className="text-xl font-bold text-white">{item.role}</h3>
                                     <span className={`text-xs font-bold px-2 py-1 rounded border ${item.type === 'Education' ? 'bg-green-500/10 text-green-400 border-green-500/20' :
-                                            item.type === 'Certification' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
-                                                'bg-blue-500/10 text-blue-400 border-blue-500/20'
+                                        item.type === 'Certification' ? 'bg-purple-500/10 text-purple-400 border-purple-500/20' :
+                                            'bg-blue-500/10 text-blue-400 border-blue-500/20'
                                         }`}>
                                         {item.type || 'Experience'}
                                     </span>

@@ -38,7 +38,16 @@ export function Chatbot({ isOpen, onClose, initialContext }: { isOpen: boolean; 
 
         const response = await chatWithGemini(newMessages);
 
-        setMessages([...newMessages, { role: "model", parts: response }]);
+        if (response.startsWith("RATE_LIMIT_EXCEEDED:")) {
+            const errorMsg = response.replace("RATE_LIMIT_EXCEEDED:", "").trim();
+            // Show as a system message or alert
+            
+            // We will add it as a model message but clearly an error.
+            setMessages([...newMessages, { role: "model", parts: `⚠️ **System Alert:** ${errorMsg}` }]);
+        } else {
+            setMessages([...newMessages, { role: "model", parts: response }]);
+        }
+
         setIsLoading(false);
     }
 

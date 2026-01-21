@@ -11,7 +11,7 @@ export function AtmosphereLayer() {
                    to make them look deeper/further away compared to the crisp foreground.
                 2. backdrop-blur-[1px]: Adds a very subtle defocus to distant objects.
             */}
-            <div className="absolute inset-0 bg-background/40 backdrop-blur-[0.5px]" />
+            <div className="hidden md:absolute md:inset-0 md:bg-background/40 md:backdrop-blur-[0.5px]" />
 
             {/* Optional: Vignette to focus attention on center */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.4)_100%)]" />

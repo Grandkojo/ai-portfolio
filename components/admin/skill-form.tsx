@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { addSkill, updateSkill, Skill } from "@/lib/db";
+import { revalidateSkills } from "@/app/actions";
 import { Loader2, Plus, X } from "lucide-react";
 
 interface SkillFormProps {
@@ -35,6 +36,10 @@ export function SkillForm({ initialData, onSuccess, onCancel }: SkillFormProps) 
         setError("");
 
         try {
+
+
+            // ... existing code ...
+
             if (initialData?.id) {
                 await updateSkill(initialData.id, {
                     name,
@@ -42,6 +47,7 @@ export function SkillForm({ initialData, onSuccess, onCancel }: SkillFormProps) 
                     level,
                     experience
                 });
+                await revalidateSkills();
                 alert("Skill updated successfully!");
             } else {
                 await addSkill({
@@ -50,6 +56,7 @@ export function SkillForm({ initialData, onSuccess, onCancel }: SkillFormProps) 
                     level,
                     experience
                 });
+                await revalidateSkills();
                 alert("Skill added successfully!");
             }
 

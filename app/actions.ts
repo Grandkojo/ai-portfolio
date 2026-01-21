@@ -4,6 +4,22 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { PORTFOLIO_DATA } from "@/lib/portfolio-data";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+import { revalidateTag } from "next/cache";
+
+
+// --- REVALIDATION ACTIONS ---
+
+export async function revalidateProjects() {
+    revalidateTag('projects');
+}
+
+export async function revalidateSkills() {
+    revalidateTag('skills');
+}
+
+export async function revalidateExperience() {
+    revalidateTag('experience');
+}
 
 const SYSTEM_PROMPT = `
 You are an AI Assistant for Ernest Kojo Owusu Essien's portfolio.
@@ -50,8 +66,47 @@ async function getProjectDocs() {
     }
 }
 
+const rateLimitMap = new Map<string, { count: number; windowStart: number; blockedUntil?: number }>();
+
+import { headers } from "next/headers";
+
 export async function chatWithGemini(messages: { role: "user" | "model"; parts: string }[]) {
     try {
+        // 1. Identify User by IP
+        const headersList = headers();
+        const ip = headersList.get("x-forwarded-for") || "unknown-ip";
+
+        // 2. Check Rate Limit
+        const now = Date.now();
+        const userRecord = rateLimitMap.get(ip) || { count: 0, windowStart: now };
+
+        // Check if blocked
+        if (userRecord.blockedUntil && now < userRecord.blockedUntil) {
+            const remainingMinutes = Math.ceil((userRecord.blockedUntil - now) / 60000);
+            return `RATE_LIMIT_EXCEEDED: You have exceeded your 5 messages per min. Please try again in ${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''}.`;
+        }
+
+        // Reset window if minute passed
+        if (now - userRecord.windowStart > 60000) {
+            userRecord.count = 0;
+            userRecord.windowStart = now;
+            userRecord.blockedUntil = undefined; // Clear block if time passed (though block check handles this)
+        }
+
+        // Increment count
+        userRecord.count++;
+
+        // Check against limit (5 per minute)
+        if (userRecord.count > 5) {
+            // Apply 3 Minute Block
+            userRecord.blockedUntil = now + 3 * 60 * 1000;
+            rateLimitMap.set(ip, userRecord);
+            return `RATE_LIMIT_EXCEEDED: You have exceeded your 5 messages per min. Please try again in 3 minutes.`;
+        }
+
+        rateLimitMap.set(ip, userRecord);
+
+
         if (!process.env.GEMINI_API_KEY) {
             return "I'm currently in demo mode (API Key missing). Please contact Ernest to see my full capabilities!";
         }

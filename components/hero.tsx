@@ -115,7 +115,7 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                         >
                             <button
                                 onClick={onOpenChat}
-                                className="group relative px-8 py-4 rounded-full bg-primary text-white font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(157,78,221,0.5)] flex items-center justify-center gap-2 overflow-hidden"
+                                className="group relative px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-primary text-white font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(157,78,221,0.5)] flex items-center justify-center gap-2 overflow-hidden"
                             >
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
                                 <Bot size={20} />
@@ -123,7 +123,7 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                             </button>
                             <button
                                 onClick={scrollToProjects}
-                                className="group px-8 py-4 rounded-full bg-white/5 border border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm flex items-center justify-center gap-2 hover:border-primary/50"
+                                className="group px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-white/5 border border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm flex items-center justify-center gap-2 hover:border-primary/50"
                             >
                                 <Code2 size={20} />
                                 View Projects

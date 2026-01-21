@@ -89,7 +89,7 @@ export const PORTFOLIO_DATA = {
         {
             type: "Experience",
             role: "Software Engineering Intern",
-            company: "Orocons Systems",
+            company: "Orcons Systems",
             period: "Oct 2024 - Jan 2025",
             location: "Mile 7, Accra",
             description: [

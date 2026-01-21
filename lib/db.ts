@@ -12,7 +12,8 @@ import {
     setDoc,
     getDoc,
     onSnapshot,
-    writeBatch
+    writeBatch,
+    serverTimestamp
 } from "firebase/firestore";
 
 // --- HELPERS ---
@@ -228,4 +229,89 @@ export const subscribeToSkills = (callback: (skills: Skill[]) => void) => {
         const skills = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Skill));
         callback(skills);
     });
+};
+
+// --- MESSAGES ---
+
+export interface Message {
+    id?: string;
+    name: string;
+    email: string;
+    message: string;
+    phone?: string;
+    createdAt: any;
+}
+
+export const addMessage = async (data: Omit<Message, "createdAt">) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        console.log("MOCK: Adding message", data);
+        return;
+    }
+    try {
+        await addDoc(collection(db, "messages"), {
+            ...data,
+            createdAt: serverTimestamp()
+        });
+    } catch (e) {
+        console.error("Error adding message:", e);
+        throw e;
+    }
+};
+
+export const deleteMessage = async (id: string) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return;
+    await deleteDoc(doc(db, "messages", id));
+};
+
+export const subscribeToMessages = (callback: (messages: Message[]) => void) => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        callback([]);
+        return () => { };
+    }
+
+    const q = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+    return onSnapshot(q, (snapshot) => {
+        const messages = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Message));
+        callback(messages);
+    });
+};
+
+
+// --- FETCH (Server-Side) ---
+
+export const getProjects = async (): Promise<Project[]> => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return [];
+    try {
+        const q = query(collection(db, "projects"), orderBy("order", "asc"));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Project));
+    } catch (e) {
+        console.error("Error fetching projects:", e);
+        return [];
+    }
+};
+
+export const getSkills = async (): Promise<Skill[]> => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return [];
+    try {
+        const q = query(collection(db, "skills"), orderBy("level", "desc"));
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Skill));
+    } catch (e) {
+        console.error("Error fetching skills:", e);
+        return [];
+    }
+};
+
+export const getExperience = async (): Promise<Experience[]> => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return [];
+    try {
+        const q = query(collection(db, "experience"), orderBy("order", "asc"));
+        const snapshot = await getDocs(q);
+        const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Experience));
+        return data;
+    } catch (e) {
+        console.error("Error fetching experience:", e);
+        return [];
+    }
 };

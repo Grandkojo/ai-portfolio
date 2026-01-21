@@ -35,6 +35,7 @@ A "Void Alchemist" themed portfolio built with **Next.js 14**, **Tailwind CSS**,
 - **AI**: [Google Generative AI SDK](https://www.npmjs.com/package/@google/generative-ai) (Gemini)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Forms**: [Web3Forms](https://web3forms.com/)
+- **Database**: Firebase Firestore (Data & Messaging)
 - **Deployment**: Google Cloud Run (Docker)
 
 ## 🚀 Getting Started
@@ -89,9 +90,10 @@ chmod +x deploy.sh
 
 ```
 ├── app/
-│   ├── actions.ts       # Server Actions (Gemini RAG Logic)
+│   ├── (admin)/admin/   # Protected Admin Dashboard (Projects, Skills, Messages)
+│   ├── actions.ts       # Server Actions (Revalidation & AI Logic)
 │   ├── layout.tsx       # Global UI (Floating Sigils, Grain, Atmosphere)
-│   └── page.tsx         # Main Landing Page
+│   └── page.tsx         # Main Landing Page (Cached)
 ├── components/
 │   ├── atmosphere-layer.tsx # Translucent depth effect
 │   ├── chatbot.tsx      # AI Assistant UI
@@ -100,6 +102,8 @@ chmod +x deploy.sh
 │   └── footer.tsx       # System Status & Links
 ├── lib/
 │   ├── project-docs/    # Markdown files for RAG context
+│   ├── db.ts            # Firestore Client & Subscription Logic
+│   ├── cached-data.ts   # Cached Server-Side Data Fetchers
 │   └── portfolio-data.ts# Static data (Experience, Projects)
 ├── deploy.sh            # Deployment Automation
 └── Dockerfile           # Production Image Config

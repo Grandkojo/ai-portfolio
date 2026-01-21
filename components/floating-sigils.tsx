@@ -62,7 +62,10 @@ export function FloatingSigils() {
             return { x: `${x}%`, y: `${y}%` };
         };
 
-        const newSigils = Array.from({ length: 25 }).map((_, i) => {
+        const isMobile = window.innerWidth < 768;
+        const sigilCount = isMobile ? 10 : 25;
+
+        const newSigils = Array.from({ length: sigilCount }).map((_, i) => {
             const pos = generatePosition();
             return {
                 id: i,

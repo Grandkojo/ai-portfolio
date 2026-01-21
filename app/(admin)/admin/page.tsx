@@ -1,7 +1,7 @@
 "use client";
 
 import { PORTFOLIO_DATA } from "@/lib/portfolio-data";
-import { addProject, addExperience, addSkill, Skill, subscribeToVisits, subscribeToProjects, subscribeToExperience, subscribeToSkills, clearCollection } from "@/lib/db";
+import { addProject, addExperience, addSkill, Skill, subscribeToVisits, subscribeToProjects, subscribeToExperience, subscribeToSkills, subscribeToMessages, clearCollection } from "@/lib/db";
 import { useEffect, useState } from "react";
 import { Database } from "lucide-react";
 import Link from "next/link";
@@ -14,19 +14,21 @@ export default function AdminDashboard() {
     const [projectCount, setProjectCount] = useState(0);
     const [experienceCount, setExperienceCount] = useState(0);
     const [skillCount, setSkillCount] = useState(0);
-    const [messageCount, setMessageCount] = useState(0); // Placeholder for now
+    const [messageCount, setMessageCount] = useState(0);
 
     useEffect(() => {
         const unsubVisits = subscribeToVisits(setVisits);
         const unsubProjects = subscribeToProjects(data => setProjectCount(data.length));
         const unsubExperience = subscribeToExperience(data => setExperienceCount(data.length));
         const unsubSkills = subscribeToSkills(data => setSkillCount(data.length));
+        const unsubMessages = subscribeToMessages(data => setMessageCount(data.length));
 
         return () => {
             unsubVisits();
             unsubProjects();
             unsubExperience();
             unsubSkills();
+            unsubMessages();
         };
     }, []);
 

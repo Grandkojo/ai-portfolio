@@ -1,23 +1,14 @@
-import { Experience, subscribeToExperience } from "@/lib/db";
+import { Experience } from "@/lib/db";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Briefcase, Calendar, MapPin, Loader2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { Briefcase, Calendar, MapPin } from "lucide-react";
+import { useRef } from "react";
 
-export function ExperienceTimeline() {
-    const [experience, setExperience] = useState<Experience[]>([]);
-    const [loading, setLoading] = useState(true);
+interface ExperienceTimelineProps {
+    experience: Experience[];
+}
 
-    useEffect(() => {
-        const unsubscribe = subscribeToExperience((data) => {
-            // Filter only work experience (or items without type for legacy)
-            const workExperience = data.filter(item =>
-                !item.type || item.type === 'Experience'
-            );
-            setExperience(workExperience);
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
+export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {
+    const timelineItems = experience.filter(item => !item.type || item.type === 'Experience');
 
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
@@ -51,17 +42,12 @@ export function ExperienceTimeline() {
                 <div className="h-1 w-24 bg-primary mx-auto rounded-full" />
             </motion.div>
 
-            {loading ? (
-                <div className="flex justify-center py-20">
-                    <Loader2 className="animate-spin text-primary w-12 h-12" />
-                </div>
-            ) : (
-                <div className="max-w-5xl mx-auto space-y-24">
-                    {experience.map((exp, index) => (
-                        <TimelineCard key={exp.id || index} exp={exp} index={index} total={experience.length} />
-                    ))}
-                </div>
-            )}
+
+            <div className="max-w-5xl mx-auto space-y-24">
+                {timelineItems.map((exp, index) => (
+                    <TimelineCard key={exp.id || index} exp={exp} index={index} total={timelineItems.length} />
+                ))}
+            </div>
         </section>
     );
 }

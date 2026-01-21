@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle2, Mail, Github, Linkedin, Copy, ExternalLink } from "lucide-react";
 import { motion } from "framer-motion";
+import { addMessage } from "@/lib/db";
 
 export function ContactSection() {
     const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
@@ -36,6 +37,13 @@ export function ContactSection() {
         const email = getInputValue("email");
         const message = getInputValue("message");
         const phone = getInputValue("phone");
+
+        // Save to Firestore
+        try {
+            await addMessage({ name, email, message, phone });
+        } catch (error) {
+            console.error("Error saving message to DB:", error);
+        }
 
         const object = {
             access_key,

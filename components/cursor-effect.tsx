@@ -34,7 +34,7 @@ export function CursorEffect() {
     if (isMobile) return null;
 
     return (
-        <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="hidden md:block fixed inset-0 z-0 pointer-events-none overflow-hidden">
             {/* The "Torch" Light Source */}
             <motion.div
                 style={{

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Project, addProject, updateProject } from "@/lib/db";
+import { revalidateProjects } from "@/app/actions";
 import { Loader2, Plus, X } from "lucide-react";
 
 interface ProjectFormProps {
@@ -68,11 +69,17 @@ export function ProjectForm({ initialData, onSuccess, onCancel }: ProjectFormPro
         e.preventDefault();
         setIsLoading(true);
         try {
+
+
+            // ... existing code ...
+
             if (initialData?.id) {
                 await updateProject(initialData.id, formData);
+                await revalidateProjects();
                 alert("Project updated successfully!");
             } else {
                 await addProject(formData);
+                await revalidateProjects();
                 alert("Project added successfully!");
             }
 

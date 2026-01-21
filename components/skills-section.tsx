@@ -1,22 +1,14 @@
-"use client";
-
-import { Skill, subscribeToSkills } from "@/lib/db";
+import { Skill } from "@/lib/db";
 import { motion } from "framer-motion";
-import { Code2, Database, Layout, Server, Wrench, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Code2, Database, Layout, Server, Wrench } from "lucide-react";
+import { useState } from "react";
 
-export function SkillsSection() {
-    const [skills, setSkills] = useState<Skill[]>([]);
-    const [loading, setLoading] = useState(true);
+interface SkillsSectionProps {
+    skills: Skill[];
+}
+
+export function SkillsSection({ skills }: SkillsSectionProps) {
     const [activeCategory, setActiveCategory] = useState<string>("All");
-
-    useEffect(() => {
-        const unsubscribe = subscribeToSkills((data) => {
-            setSkills(data);
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
 
     const categories = ["All", "Frontend", "Backend", "Database", "Tools", "AI/ML", "Other"];
 
@@ -65,52 +57,48 @@ export function SkillsSection() {
                 </div>
             </motion.div>
 
-            {loading ? (
-                <div className="flex justify-center py-20">
-                    <Loader2 className="animate-spin text-primary w-12 h-12" />
-                </div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-                    {filteredSkills.map((skill, index) => (
-                        <motion.div
-                            key={skill.id || index}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.05 }}
-                            className="group p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/30 transition-all hover:-translate-y-1"
-                        >
-                            <div className="flex items-center justify-between mb-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
-                                        {getIcon(skill.category)}
-                                    </div>
-                                    <h3 className="font-bold text-white text-lg">{skill.name}</h3>
-                                </div>
-                                <span className="text-xs font-mono text-white/40 bg-white/5 px-2 py-1 rounded">
-                                    {skill.experience}
-                                </span>
-                            </div>
 
-                            <div className="space-y-2">
-                                <div className="flex justify-between text-sm">
-                                    <span className="text-white/50">Proficiency</span>
-                                    <span className="text-white font-mono">{skill.level * 10}%</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                {filteredSkills.map((skill, index) => (
+                    <motion.div
+                        key={skill.id || index}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.05 }}
+                        className="group p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/30 transition-all hover:-translate-y-1"
+                    >
+                        <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
+                                <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary group-hover:text-white transition-colors">
+                                    {getIcon(skill.category)}
                                 </div>
-                                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                                    <motion.div
-                                        initial={{ width: 0 }}
-                                        whileInView={{ width: `${skill.level * 10}%` }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 1, ease: "easeOut" }}
-                                        className="h-full bg-gradient-to-r from-primary to-accent rounded-full"
-                                    />
-                                </div>
+                                <h3 className="font-bold text-white text-lg">{skill.name}</h3>
                             </div>
-                        </motion.div>
-                    ))}
-                </div>
-            )}
+                            <span className="text-xs font-mono text-white/40 bg-white/5 px-2 py-1 rounded">
+                                {skill.experience}
+                            </span>
+                        </div>
+
+                        <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                                <span className="text-white/50">Proficiency</span>
+                                <span className="text-white font-mono">{skill.level * 10}%</span>
+                            </div>
+                            <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    whileInView={{ width: `${skill.level * 10}%` }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1, ease: "easeOut" }}
+                                    className="h-full bg-gradient-to-r from-primary to-accent rounded-full"
+                                />
+                            </div>
+                        </div>
+                    </motion.div>
+                ))}
+            </div>
+
         </section>
     );
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Experience, addExperience, updateExperience } from "@/lib/db";
+import { revalidateExperience } from "@/app/actions";
 import { Loader2, X } from "lucide-react";
 
 interface ExperienceFormProps {
@@ -55,11 +56,17 @@ export function ExperienceForm({ initialData, onSuccess, onCancel }: ExperienceF
         e.preventDefault();
         setIsLoading(true);
         try {
+
+
+            // ... existing code ...
+
             if (initialData?.id) {
                 await updateExperience(initialData.id, formData);
+                await revalidateExperience();
                 alert("Experience updated successfully!");
             } else {
                 await addExperience(formData);
+                await revalidateExperience();
                 alert("Experience added successfully!");
             }
 

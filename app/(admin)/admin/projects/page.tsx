@@ -3,6 +3,7 @@
 import { ProjectForm } from "@/components/admin/project-form";
 import { deleteProject, Project, subscribeToProjects } from "@/lib/db";
 import { Edit2, ExternalLink, Github, Plus, Trash2 } from "lucide-react";
+import { revalidateProjects } from "@/app/actions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -16,9 +17,12 @@ export default function AdminProjects() {
         return () => unsubscribe();
     }, []);
 
+
+
     const handleDelete = async (id: string, title: string) => {
         if (confirm(`Are you sure you want to delete "${title}"?`)) {
             await deleteProject(id);
+            await revalidateProjects();
         }
     };
 

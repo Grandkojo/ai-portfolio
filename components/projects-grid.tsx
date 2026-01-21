@@ -1,26 +1,14 @@
-"use client";
-
-import { Project, subscribeToProjects } from "@/lib/db";
+import { Project } from "@/lib/db";
 import { ProjectCard } from "./project-card";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
 
 interface ProjectsGridProps {
+    projects: Project[];
     onAskAI: (context: string) => void;
 }
 
-export function ProjectsGrid({ onAskAI }: ProjectsGridProps) {
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const unsubscribe = subscribeToProjects((data) => {
-            setProjects(data);
-            setLoading(false);
-        });
-        return () => unsubscribe();
-    }, []);
+export function ProjectsGrid({ projects, onAskAI }: ProjectsGridProps) {
+    // Removed internal state fetching
 
     const container = {
         hidden: { opacity: 0 },
@@ -48,35 +36,31 @@ export function ProjectsGrid({ onAskAI }: ProjectsGridProps) {
                 </p>
             </motion.div>
 
-            {loading ? (
-                <div className="flex justify-center py-20">
-                    <Loader2 className="animate-spin text-primary w-12 h-12" />
-                </div>
-            ) : (
-                <motion.div
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: "-100px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
-                >
-                    {projects.map((project, index) => (
-                        <ProjectCard
-                            key={project.id || index}
-                            project={{
-                                title: project.title,
-                                subtitle: project.tech[0] || "Project", // Fallback
-                                tech: project.tech,
-                                description: project.description,
-                                links: { demo: project.projectUrl, github: project.githubUrl },
-                                imageUrl: project.imageUrl
-                            }}
-                            onAskAI={(title) => onAskAI(`Tell me about the technical approach for the ${title} project.`)}
-                            index={index}
-                        />
-                    ))}
-                </motion.div>
-            )}
+
+            <motion.div
+                variants={container}
+                initial="hidden"
+                whileInView="show"
+                viewport={{ once: true, margin: "-100px" }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8"
+            >
+                {projects.map((project, index) => (
+                    <ProjectCard
+                        key={project.id || index}
+                        project={{
+                            title: project.title,
+                            subtitle: project.tech[0] || "Project", // Fallback
+                            tech: project.tech,
+                            description: project.description,
+                            links: { demo: project.projectUrl, github: project.githubUrl },
+                            imageUrl: project.imageUrl
+                        }}
+                        onAskAI={(title) => onAskAI(`Tell me about the technical approach for the ${title} project.`)}
+                        index={index}
+                    />
+                ))}
+            </motion.div>
+
         </section>
     );
 }
