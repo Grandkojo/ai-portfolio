@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // --- Helper Functions ---
+    
+    // Check if the user is authenticated (signed in)
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Check if the input data has the required fields and types for messages
+    function isValidMessage() {
+      let incoming = request.resource.data;
+      return incoming.name is string &&
+             incoming.name.size() > 0 &&
+             incoming.email is string &&
+             incoming.email.size() > 0 &&
+             incoming.message is string &&
+             incoming.message.size() > 0;
+    }
+
+    // --- Collection Rules ---
+
+    // Projects: Public Read, Admin Write
+    match /projects/{projectID} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Experience: Public Read, Admin Write
+    match /experience/{experienceID} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Skills: Public Read, Admin Write
+    match /skills/{skillID} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+    
+    // Analytics: Public Read (for now), Admin Write
+    match /analytics/{docID} {
+      allow read: if true;
+      allow write: if true; // Keeping open for visits increment for now, could be tighter
+    }
+
+    // Messages: Admin Read/Delete, Public Create (with validation)
+    match /messages/{messageID} {
+      allow read, delete: if isAuthenticated();
+      allow create: if isValidMessage();
+      allow update: if false; // Messages shouldn't change after sending
+    }
+  }
+}

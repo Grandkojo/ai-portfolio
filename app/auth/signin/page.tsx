@@ -18,6 +18,8 @@ export default function SignIn() {
         setError("");
 
         try {
+            // 1. Sign in to NextAuth (for routing/session)
+            // We do this first to validate credentials against env vars
             const res = await signIn("credentials", {
                 username,
                 password,
@@ -27,12 +29,33 @@ export default function SignIn() {
             if (res?.error) {
                 setError("Invalid credentials");
                 setLoading(false);
-            } else {
-                router.push("/admin");
-                router.refresh();
+                return;
             }
-        } catch (error) {
-            setError("Something went wrong");
+
+            // 2. Sign in to Firebase (for database access)
+            // We use the ADMIN_USER email convention or just the raw input if it's an email
+            // Since username is arbitrary, we assume the admin email is stable.
+            // For now, we'll try to sign in with the configured admin email and the provided password.
+
+            const adminEmail = process.env.NEXT_PUBLIC_ADMIN_USER // User configured admin user
+
+            // Dynamic import to avoid SSR issues if any
+            const { signInWithEmailAndPassword } = await import("firebase/auth");
+            const { auth } = await import("@/lib/firebase");
+
+            if (!adminEmail) {
+                throw new Error("Admin email is not configured in environment variables");
+            }
+
+            await signInWithEmailAndPassword(auth, adminEmail, password);
+
+            // 3. Redirect
+            router.push("/admin");
+            router.refresh();
+
+        } catch (error: any) {
+            console.error("Login error:", error);
+            setError(error.message || "Something went wrong authentication with Firebase");
             setLoading(false);
         }
     };

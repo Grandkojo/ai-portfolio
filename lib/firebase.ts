@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getFirestore, initializeFirestore, setLogLevel } from "firebase/firestore";
-// import { getAuth } from "firebase/auth"; // Will use later
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -29,5 +29,6 @@ const db = initializeFirestore(app, {
     experimentalForceLongPolling: true,
 }, "ai-portfolio");
 
-export { db };
-// const auth = getAuth(app);
+const auth = getAuth(app);
+
+export { db, auth };
