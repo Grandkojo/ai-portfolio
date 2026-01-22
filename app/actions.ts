@@ -31,6 +31,8 @@ ${JSON.stringify(PORTFOLIO_DATA, null, 2)}
 CURRENT DATE: ${new Date().toDateString()}
 
 GUIDELINES:
+- **CONTEXT ONLY**: Your knowledge is strictly limited to the provided data about Ernest (Projects, Skills, Experience). Do NOT answer general questions, do NOT solve coding problems, and do NOT provide external knowledge that is not in the context.
+- **NO CODE GENERATION**: Do NOT write code, debug code, or solve technical interview questions. If asked, politely explain that you are only here to discuss Ernest's portfolio.
 - Be professional, friendly, and concise.
 - If asked about technical skills, refer to the skills section and project usage.
 - If asked about a specific project, provide details from the project description and explain the tech stack.
@@ -45,6 +47,7 @@ GUIDELINES:
 
 import fs from "fs/promises";
 import path from "path";
+import { checkRateLimit } from "@/lib/db";
 
 async function getProjectDocs() {
     try {
@@ -66,46 +69,21 @@ async function getProjectDocs() {
     }
 }
 
-const rateLimitMap = new Map<string, { count: number; windowStart: number; blockedUntil?: number }>();
-
 import { headers } from "next/headers";
 
 export async function chatWithGemini(messages: { role: "user" | "model"; parts: string }[]) {
     try {
         // 1. Identify User by IP
         const headersList = headers();
-        const ip = headersList.get("x-forwarded-for") || "unknown-ip";
+        const forwardedFor = headersList.get("x-forwarded-for");
+        const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : "unknown-ip";
 
-        // 2. Check Rate Limit
-        const now = Date.now();
-        const userRecord = rateLimitMap.get(ip) || { count: 0, windowStart: now };
+        // 2. Check Rate Limit (Firestore)
+        const rateLimit = await checkRateLimit(ip);
 
-        // Check if blocked
-        if (userRecord.blockedUntil && now < userRecord.blockedUntil) {
-            const remainingMinutes = Math.ceil((userRecord.blockedUntil - now) / 60000);
-            return `RATE_LIMIT_EXCEEDED: You have exceeded your 5 messages per min. Please try again in ${remainingMinutes} minute${remainingMinutes > 1 ? 's' : ''}.`;
+        if (rateLimit.blocked) {
+            return `RATE_LIMIT_EXCEEDED: ${rateLimit.message}`;
         }
-
-        // Reset window if minute passed
-        if (now - userRecord.windowStart > 60000) {
-            userRecord.count = 0;
-            userRecord.windowStart = now;
-            userRecord.blockedUntil = undefined; // Clear block if time passed (though block check handles this)
-        }
-
-        // Increment count
-        userRecord.count++;
-
-        // Check against limit (5 per minute)
-        if (userRecord.count > 5) {
-            // Apply 3 Minute Block
-            userRecord.blockedUntil = now + 3 * 60 * 1000;
-            rateLimitMap.set(ip, userRecord);
-            return `RATE_LIMIT_EXCEEDED: You have exceeded your 5 messages per min. Please try again in 3 minutes.`;
-        }
-
-        rateLimitMap.set(ip, userRecord);
-
 
         if (!process.env.GEMINI_API_KEY) {
             return "I'm currently in demo mode (API Key missing). Please contact Ernest to see my full capabilities!";

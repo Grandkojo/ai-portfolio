@@ -315,3 +315,63 @@ export const getExperience = async (): Promise<Experience[]> => {
         return [];
     }
 };
+
+// --- RATE LIMITING ---
+
+export const checkRateLimit = async (ip: string): Promise<{ blocked: boolean; message?: string }> => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        // Mock allow in dev/missing keys
+        return { blocked: false };
+    }
+
+    try {
+        const docRef = doc(db, "rate_limits", ip);
+        const docSnap = await getDoc(docRef);
+        const now = Date.now();
+        const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+        const LIMIT = 10;
+
+        if (!docSnap.exists()) {
+            await setDoc(docRef, {
+                count: 1,
+                windowStart: now,
+                lastSeen: now
+            });
+            return { blocked: false };
+        }
+
+        const data = docSnap.data();
+        const windowStart = data.windowStart || now;
+
+        // Check if 24 hours have passed since windowStart
+        if (now - windowStart > TWENTY_FOUR_HOURS) {
+            // Reset
+            await updateDoc(docRef, {
+                count: 1,
+                windowStart: now,
+                lastSeen: now
+            });
+            return { blocked: false };
+        }
+
+        // Check limit
+        if (data.count >= LIMIT) {
+            return {
+                blocked: true,
+                message: "Daily message limit (10) exceeded. Please try again in 24 hours."
+            };
+        }
+
+        // Increment
+        await updateDoc(docRef, {
+            count: increment(1),
+            lastSeen: now
+        });
+        return { blocked: false };
+
+    } catch (e) {
+        console.error("Rate limit check error:", e);
+        // Fail open if DB error
+        return { blocked: false };
+    }
+};

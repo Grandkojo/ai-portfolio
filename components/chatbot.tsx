@@ -41,7 +41,7 @@ export function Chatbot({ isOpen, onClose, initialContext }: { isOpen: boolean; 
         if (response.startsWith("RATE_LIMIT_EXCEEDED:")) {
             const errorMsg = response.replace("RATE_LIMIT_EXCEEDED:", "").trim();
             // Show as a system message or alert
-            
+
             // We will add it as a model message but clearly an error.
             setMessages([...newMessages, { role: "model", parts: `⚠️ **System Alert:** ${errorMsg}` }]);
         } else {
@@ -161,6 +161,9 @@ export function Chatbot({ isOpen, onClose, initialContext }: { isOpen: boolean; 
                                 {isLoading ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
                             </button>
                         </form>
+                        <p className="text-[10px] text-white/30 text-center mt-2">
+                            Notice: No data from this conversation is stored on my app.
+                        </p>
                     </div>
                 </motion.div>
             )}

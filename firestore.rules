@@ -53,5 +53,10 @@ service cloud.firestore {
       allow create: if isValidMessage();
       allow update: if false; // Messages shouldn't change after sending
     }
+
+    // Rate Limits: Open for Server Actions (acting as client) to track usage
+    match /rate_limits/{ip} {
+      allow read, write: if true;
+    }
   }
 }
