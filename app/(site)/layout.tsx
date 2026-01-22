@@ -15,6 +15,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"),
   title: "Ernest Kojo Owusu Essien | AI-Powered Portfolio",
   description: "Software Engineer & AI Innovator. Experience the future of portfolios.",
 };
