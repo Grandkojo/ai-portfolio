@@ -68,7 +68,7 @@ export function Chatbot({ isOpen, onClose, initialContext }: { isOpen: boolean; 
                             </div>
                             <div>
                                 <h3 className="font-bold text-white">Ernest&apos;s AI Agent</h3>
-                                <p className="text-xs text-white/60">Powered by Gemini Pro</p>
+                                <p className="text-xs text-white/60">Powered by Gemini Flash</p>
                             </div>
                         </div>
                         <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-full transition-colors">
