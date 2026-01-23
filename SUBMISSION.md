@@ -34,6 +34,7 @@ I didn't just want a static resume; I wanted a living, breathing digital space t
     -   **Message Management**: Contact form submissions are saved to Firestore and can be read/deleted directly from the dashboard.
     -   **Dynamic Content**: My projects and skills are managed via the dashboard, allowing me to update my portfolio instantly.
 3.  **Immersive UI**: Used Framer Motion for the particle network, floating sigils, and "atmosphere" layer to create a depth-of-field effect that feels premium and cinematic.
+4.  **Smart Greeting System**: The site detects where you're visiting from and greets you in your native language (e.g., "Akwaaba" if you're in Ghana, "Bonjour" for France). It adds a personal touch usually missing from static portfolios.
 
 ## What I'm Most Proud Of
 1.  **The Full-Stack Admin Ecosystem**: I'm most proud of moving away from hardcoded JSON files. Building a full Admin Dashboard where I can see messages from recruiters and manage my project showcase makes this a true production-grade application, not just a static template.
