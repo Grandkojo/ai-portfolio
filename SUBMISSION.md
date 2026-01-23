@@ -7,7 +7,7 @@ tags: devchallenge, googleaichallenge, portfolio, gemini, nextjs
 *This is a submission for the [New Year, New You Portfolio Challenge Presented by Google AI](https://dev.to/challenges/new-year-new-you-google-ai-2025-12-31)*
 
 ## About Me
-Hi, I'm **Ernest Kojo Owusu Essien**, a Software Engineer specializing in Backend Systems and AI. I build systems that think. My goal for 2026 is to push the boundaries of web experiences by merging rigorous backend logic with immersive, cinematic frontend designs.
+Hi, I'm **Ernest Kojo Owusu Essien**, a Software Engineer specializing in Backend Systems and AI. I build systems that think. My goal for 2026 is to push the boundaries of web experiences by merging rigorous backend logic with immersive, cinematic frontend designs. I don't just build websites; I build digital artifacts.
 
 ## Portfolio
 <!-- 
@@ -19,24 +19,26 @@ Example: https://ai-portfolio-xyz-uc.a.run.app
 {% embed https://ai-portfolio-48210516724.us-central1.run.app %}
 
 ## How I Built It
-I didn't just want a static resume; I wanted a living, breathing digital space.
+I didn't just want a static resume; I wanted a living, breathing digital space that I can manage and evolve without touching code for every content update.
 
 ### The Stack
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router) for performance and SEO.
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router) for performance, SEO, and server actions.
 - **Styling**: [Tailwind CSS](https://tailwindcss.com/) for a custom "Void Alchemist" design system.
-- **Animation**: [Framer Motion](https://www.framer.com/motion/) for the floating sigils and parallax effects.
-- **Deployment**: **Google Cloud Run** via Docker containers.
+- **Backend & Database**: **Firebase (Firestore & Auth)**. I moved beyond static data to a real-time database to manage my projects and messages.
+- **AI**: **Gemini 1.5 Flash** via the Google AI SDK.
+- **Deployment**: **Google Cloud Run** via Docker containers for serverless scalability.
 
-### Google AI Integration (The Brain) 🧠
-The centerpiece of this portfolio is the **AI Agent** (bottom right). It's not a generic chatbot.
-1.  **Gemini Flash**: I used the `gemini-1.5-flash` model via the Google AI SDK for snappy, intelligent responses.
-2.  **RAG (Retrieval-Augmented Generation)**: The AI has access to my actual project documentation (markdown files in my repo). When you ask about "Episcope" or "MedForecast", it reads the detailed docs to give you specific, accurate answers about my architecture and tech stack.
-3.  **Persona**: I engineered the system prompt to behave like a professional partner—switching between "Recruiter Mode" (concise, metrics-focused) and "Dev Mode" (technical, architectural) based on context.
+### Key Features
+1.  **AI Integration (The Brain)**: The "Void Alchemist" AI agent (bottom right) is powered by Gemini. It uses **RAG (Retrieval-Augmented Generation)** to access my actual markdown documentation, allowing it to answer specific technical questions about my work with high accuracy.
+2.  **Admin Dashboard (The Control Room)**: I built a secured Admin Panel (`/admin`) using **NextAuth** and **Firebase**.
+    -   **Message Management**: Contact form submissions are saved to Firestore and can be read/deleted directly from the dashboard.
+    -   **Dynamic Content**: My projects and skills are managed via the dashboard, allowing me to update my portfolio instantly.
+3.  **Immersive UI**: Used Framer Motion for the particle network, floating sigils, and "atmosphere" layer to create a depth-of-field effect that feels premium and cinematic.
 
 ## What I'm Most Proud Of
-1.  **The "Atmosphere"**: I built a multi-layered background system. Floating code "sigils" drift in the void, but I added a **translucent atmospheric layer** between them and the content. This creates a fake depth-of-field effect that makes the text readable while keeping the background immersive.
-2.  **Obsidian UI**: I aimed for a "premium dark mode" look—glassmorphism with deep black tints, subtle white borders, and neon cyan accents.
-3.  **The Code**: It's robust. The contact form uses Web3Forms, the animations are optimized, and the entire app acts as a standalone artifact ready for cloud scaling.
+1.  **The Full-Stack Admin Ecosystem**: I'm most proud of moving away from hardcoded JSON files. Building a full Admin Dashboard where I can see messages from recruiters and manage my project showcase makes this a true production-grade application, not just a static template.
+2.  **The AI "Persona"**: Tuning the Gemini prompt was an art. It switches seamlessly between "Recruiter Mode" (concise, metrics) and "Dev Mode" (technical deep-dives), making it feel like a real extension of myself.
+3.  **Cloud Run Deployment**: Getting the Docker container optimized and deployed on Cloud Run was a seamless experience. The app scales down to zero when not in use, which is perfect for a portfolio.
 
 <!-- Don't forget to include the dev label! -->
 --labels dev-tutorial=devnewyear2026

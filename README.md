@@ -1,42 +1,71 @@
 # 🌌 The Void Alchemist | Next.js AI Portfolio
 
-![Hero Section](imgs/portfolio_hero.png)
+![Hero Section](imgs/site_hero.png)
 
-A "Void Alchemist" themed portfolio built with **Next.js 14**, **Tailwind CSS**, and **Framer Motion**, featuring a context-aware **AI Chatbot powered by Google Gemini** (RAG-enabled) and deployed on **Google Cloud Run**.
+A "Void Alchemist" themed portfolio built with **Next.js 14**, **Tailwind CSS**, and **Framer Motion**. It features a context-aware **AI Chatbot powered by Google Gemini** (RAG-enabled), a fully dynamic **Admin Dashboard** backed by **Firebase**, and is deployed on **Google Cloud Run**.
 
 > *"I build systems that think."*
 
-## ✨ Features
+## ✨ Key Features
 
-- **🔮 Void Alchemist Aesthetic**: Deep "Obsidian" dark mode with neon cyan accents, glassmorphism, floating code sigils, and a multi-layered atmospheric background.
-- **🧠 AI Agent Integration**:
-  - Powered by **Google Gemini 1.5 Flash**.
-  - **RAG System**: The AI reads this repo's documentation to answer specific questions about my projects and architecture.
-  - Generative UI: Can analyze resumes or project ideas on the fly.
-  - Crystal Orb Interface: A futuristic, animated trigger button.
-- **🎭 Cinematic UI**:
-  - Translucent "Atmosphere Layer" for depth.
-  - "Torch Cursor" effect tracking mouse movement.
-  - Film Grain and Vignette overlays.
-- **📨 Functional Contact Form**:
-  - Integrated with **Web3Forms**.
-  - Custom "Neon Green" success/error notifications.
-- **☁️ Cloud-Native**:
-  - Containerized with Docker (multi-stage build).
-  - Deployed on **Google Cloud Run** for serverless scaling.
+### 🎨 The "Void Alchemist" Aesthetic
+Designed to be a living digital artifact.
+- **Atmosphere Layer**: A translucent depth-of-field effect that sits between the content and the background.
+- **Floating Sigils**: Animated code symbols drifting in the void.
+- **Cinematic UI**: Glassmorphism, neon cyan accents, and "Torch Cursor" effects.
 
-![Chatbot Interface](imgs/portfolio_chatbot.png)
+### 🧠 Intelligent AI Agent
+![Chatbot Interface](imgs/site_chatbot.png)
+
+This isn't just a chatbot; it's a partner.
+- **Powered by Google Gemini 1.5 Flash**: Fast, intelligent, and cost-effective.
+- **RAG (Retrieval-Augmented Generation)**: The agent has read-access to my private documentation (markdown files). Ask it about "Episcope" or "MedForecast", and it retrieves the exact tech stack and architecture details.
+- **Adaptive Persona**: Switches between "Recruiter Mode" (concise, metrics-heavy) and "Dev Mode" (technical deep-dives) based on who it's talking to.
+
+### 🎛️ Dynamic Admin Dashboard
+![Admin Projects](imgs/admin_projects.png)
+
+The portfolio is fully dynamic. I don't touch code to update my content.
+- **Project Management**: Add, edit, or remove projects directly from the Admin Panel. Changes reflect instantly on the main site.
+- **Message Center**: ![Admin Messages](imgs/admin_messages.png)
+  Contact form submissions are saved to **Firestore**. I can read and conduct triage on messages without checking my email.
+- **Skill & Experience Management**: Update my timeline and tech stack on the fly.
+
+### 🚀 Immersive Content Sections
+**Featured Projects**
+![Featured Projects](imgs/site_featured_projects.png)
+
+**Experience Journey**
+![Journey Section](imgs/site_journey.png)
+
+**Qualifications & Skills**
+![Qualifications](imgs/site_qualifications.png)
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+### Core
+- **Framework**: [Next.js 14](https://nextjs.org/) (App Router, Server Actions)
+- **Language**: TypeScript
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [clsx](https://github.com/lukeed/clsx)
 - **Animation**: [Framer Motion](https://www.framer.com/motion/)
-- **AI**: [Google Generative AI SDK](https://www.npmjs.com/package/@google/generative-ai) (Gemini)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Forms**: [Web3Forms](https://web3forms.com/)
-- **Database**: Firebase Firestore (Data & Messaging)
-- **Deployment**: Google Cloud Run (Docker)
+
+### Data & Backend
+- **Database**: **Firebase Firestore** (Projects, Messages, Experience data)
+- **Auth**: **NextAuth.js** (Admin protection)
+- **Forms**: **Web3Forms** (Email redundancy) + Firebase (Persistence)
+
+### AI & Intelligence
+- **Model**: **Google Gemini 1.5 Flash**
+- **SDK**: Google Generative AI SDK
+- **Technique**: In-Context Retrieval Augmented Generation (RAG)
+
+### Infrastructure
+- **Container**: Docker (Multi-stage build)
+- **Deployment**: **Google Cloud Run** (Serverless, Auto-scaling)
+
+---
 
 ## 🚀 Getting Started
 
@@ -53,11 +82,22 @@ Create a `.env.local` file in the root:
 # Google AI Studio Key
 GEMINI_API_KEY=your_gemini_api_key_here
 
-# Web3Forms Access Key (for contact form)
-NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_key_here
+# Firebase Config (Client)
+NEXT_PUBLIC_FIREBASE_API_KEY=...
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+# ... other firebase config
 
-# App URL (Production)
-NEXT_PUBLIC_APP_URL=https://your-cloud-run-url.run.app
+# Firebase Admin (Server Service Account)
+FIREBASE_PROJECT_ID=...
+FIREBASE_CLIENT_EMAIL=...
+FIREBASE_PRIVATE_KEY=...
+
+# Admin Auth
+ADMIN_EMAIL=your_email@example.com
+
+# Web3Forms Access Key (Optional backup)
+NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY=your_web3forms_key_here
 ```
 
 ### 3. Run Locally
@@ -66,47 +106,45 @@ npm run dev
 ```
 Visit `http://localhost:3000`.
 
+---
+
 ## ☁️ Deployment
 
-This project includes a **one-click deployment script** for Google Cloud Run.
+This project acts as a standalone artifact, ready for the cloud.
 
-### Prerequisites
-- Google Cloud SDK (`gcloud`) installed and authenticated.
-- A Google Cloud Project with billing enabled.
-
-### Deploying
-The `deploy.sh` script automates enabling APIs, building the container, deploying to Cloud Run, and cleaning up old image versions to save costs.
+### Automated Deployment to Google Cloud Run
+The included `deploy.sh` script handles everything:
+1.  Enables necessary Google Cloud APIs.
+2.  Builds the Docker image.
+3.  Pushes to Google Container Registry (GCR).
+4.  Deploys to Cloud Run with environment variables.
+5.  Cleans up old images to save storage costs.
 
 ```bash
 chmod +x deploy.sh
 ./deploy.sh
 ```
 
-> **Note**: The script loads environment variables automatically from `.env.local`.
-
-![Journey Section](imgs/portfolio_journey.png)
+---
 
 ## 📂 Project Structure
 
 ```
 ├── app/
-│   ├── (admin)/admin/   # Protected Admin Dashboard (Projects, Skills, Messages)
-│   ├── actions.ts       # Server Actions (Revalidation & AI Logic)
-│   ├── layout.tsx       # Global UI (Floating Sigils, Grain, Atmosphere)
-│   └── page.tsx         # Main Landing Page (Cached)
+│   ├── (admin)/admin/   # Protected Admin Dashboard (CMS)
+│   ├── (site)/          # Public Portfolio Pages
+│   ├── actions.ts       # Server Actions (AI, Revalidation)
+│   └── api/             # API Routes
 ├── components/
-│   ├── atmosphere-layer.tsx # Translucent depth effect
 │   ├── chatbot.tsx      # AI Assistant UI
-│   ├── contact.tsx      # Web3Forms Integration
-│   ├── floating-sigils.tsx # Background Animation
-│   └── footer.tsx       # System Status & Links
+│   ├── atmosphere-layer.tsx # Visual Effects
+│   └── ...
 ├── lib/
-│   ├── project-docs/    # Markdown files for RAG context
-│   ├── db.ts            # Firestore Client & Subscription Logic
-│   ├── cached-data.ts   # Cached Server-Side Data Fetchers
-│   └── portfolio-data.ts# Static data (Experience, Projects)
-├── deploy.sh            # Deployment Automation
-└── Dockerfile           # Production Image Config
+│   ├── db.ts            # Firebase Client SDK
+│   ├── firebase-admin.ts # Firebase Admin SDK
+│   └── project-docs/    # Markdown files for RAG context
+├── imgs/                # Screenshots & Assets
+└── deploy.sh            # Deployment Automation
 ```
 
 ## 🏆 Credits
