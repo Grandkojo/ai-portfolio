@@ -150,3 +150,17 @@ chmod +x deploy.sh
 ## 🏆 Credits
 
 Built by **Ernest Kojo Owusu Essien** for the **Google AI "New Year, New You" Challenge**.
+
+---
+
+## 📄 License
+
+This project is open source and available under the [MIT License](LICENSE).
+
+**Note on Intellectual Property:**
+While the code structure, components, and logic are open for you to use and adapt, the following assets are **Copyright © 2026 Ernest Kojo Owusu Essien** and are **NOT** covered by the MIT license:
+-   All personal photos and images in the `imgs/` folder (including my portrait).
+-   Specific project descriptions, biography text, and personal data.
+-   The "Void Alchemist" branding identity.
+
+Please replace these assets with your own if you fork or clone this repository.
