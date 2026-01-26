@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Terminal, MessageSquare, Bot, Code2, Sparkles } from "lucide-react";
 import { Typewriter } from "./typewriter";
+import Image from "next/image";
 
 const heroImages = [
     '/images/hero_portrait.jpg',
@@ -182,13 +183,21 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 1 }}
-                                    className="absolute inset-0 bg-cover bg-center z-10"
+                                    className="absolute inset-0 z-10"
                                     style={{
-                                        backgroundImage: `url('${heroImages[currentImageIndex]}')`,
                                         maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
                                         WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)"
                                     }}
-                                />
+                                >
+                                    <Image
+                                        src={heroImages[currentImageIndex]}
+                                        alt="Hero Portrait"
+                                        fill
+                                        className={`object-cover ${currentImageIndex === 3 ? 'object-center' : 'object-top'}`}
+                                        priority
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                    />
+                                </motion.div>
                             </AnimatePresence>
 
                             {/* Overlay to darken and tint the image slightly to fit the void */}
@@ -201,4 +210,3 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
         </section>
     );
 }
-

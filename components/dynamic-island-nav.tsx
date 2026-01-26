@@ -88,7 +88,7 @@ function MobileNav() {
                     height: isOpen ? "auto" : "50px",
                     borderRadius: "25px"
                 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className={`flex flex-col overflow-hidden bg-black/90 border border-white/20 backdrop-blur-xl shadow-2xl ${isOpen ? "p-4" : "px-2 py-1"}`}
             >
                 {/* Header Row (Always Visible) */}

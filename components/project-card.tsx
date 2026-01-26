@@ -3,6 +3,7 @@
 import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
 import { Bot, ExternalLink, Github, ArrowUpRight } from "lucide-react";
 import { MouseEvent, useRef, useState } from "react";
+import Image from "next/image";
 
 interface ProjectProps {
     title: string;
@@ -72,10 +73,12 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
             {/* Cover Image */}
             {project.imageUrl && (
                 <div className="relative h-48 w-full overflow-hidden border-b border-white/5">
-                    <img
+                    <Image
                         src={project.imageUrl}
                         alt={project.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-700 opacity-60 group-hover:opacity-100"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#050505] to-transparent" />
                 </div>
@@ -89,16 +92,16 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
                             {project.title}
                         </h3>
                         <div className="flex flex-wrap gap-2">
-                    {project.tech.map((t) => (
-                        <span
-                            key={t}
-                            className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-600 text-white border border-blue-400/30 mb-2 shadow-[0_0_10px_rgba(37,99,235,0.4)]"
-                        >
-                            {t}
-                        </span>
-                    ))}
-                </div>
-                        
+                            {project.tech.map((t) => (
+                                <span
+                                    key={t}
+                                    className="px-3 py-1 text-xs font-semibold rounded-full bg-blue-600 text-white border border-blue-400/30 mb-2 shadow-[0_0_10px_rgba(37,99,235,0.4)]"
+                                >
+                                    {t}
+                                </span>
+                            ))}
+                        </div>
+
                     </div>
 
                     <div className="flex gap-3">
@@ -127,9 +130,6 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
                 <p className="text-muted-foreground mb-8 leading-relaxed line-clamp-4">
                     {project.description}
                 </p>
-
-                {/* Tech Stack - Bento Style Pills */}
-                
 
                 {/* Action Button */}
                 <button
