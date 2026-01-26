@@ -62,7 +62,7 @@ export default function ServicesPage() {
                                 </Link>
                             </div>
 
-                            <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="lg:w-2/3 grid grid-cols-1 xl:grid-cols-2 gap-6">
                                 <ServiceCard
                                     icon={<ShieldCheck className="text-emerald-400" />}
                                     title="Healthcare"
@@ -114,7 +114,7 @@ export default function ServicesPage() {
                                 </Link>
                             </div>
 
-                            <div className="lg:w-2/3 grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="lg:w-2/3 grid grid-cols-1 xl:grid-cols-2 gap-6">
                                 <ServiceCard
                                     icon={<Globe className="text-cyan-400" />}
                                     title="Web Applications"

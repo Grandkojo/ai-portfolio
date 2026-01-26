@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Terminal, MessageSquare, Bot, Code2, Sparkles } from "lucide-react";
 import { Typewriter } from "./typewriter";
 import Image from "next/image";
+import { getUserLocation } from "@/app/actions";
 
 const heroImages = [
     '/images/hero_portrait.jpg',
@@ -34,12 +35,8 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                 // Default to time-based first
                 setGreeting(timeGreeting);
 
-                // Try to get location
-                const res = await fetch('https://ipapi.co/json/');
-                if (!res.ok) throw new Error('Failed to fetch location');
-
-                const data = await res.json();
-                const country = data.country_code;
+                // Try to get location from server action
+                const country = await getUserLocation();
 
                 const greetings: Record<string, string> = {
                     GH: "Akwaaba", // Ghana
@@ -62,7 +59,7 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                     DK: "Hej",     // Denmark
                 };
 
-                if (greetings[country]) {
+                if (country && greetings[country]) {
                     setGreeting(greetings[country]);
                 }
             } catch (error) {
