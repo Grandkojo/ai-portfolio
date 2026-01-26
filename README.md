@@ -14,10 +14,8 @@ Designed to be a living digital artifact.
 - **Floating Sigils**: Animated code symbols drifting in the void.
 - **Cinematic UI**: Glassmorphism, neon cyan accents, and "Torch Cursor" effects.
 
-### 🌍 Smart Greeting System
-A personal touch for every visitor.
-- **Location Awareness**: Detects the visitor's country via IP to greet them in their local language (e.g., "Akwaaba" for Ghana, "Bonjour" for France).
-- **Time-Aware**: If location access fails, it adapts to the time of day ("Good Evening").
+### 🕰️ Dynamic Greeting System
+- **Time-Aware**: Adapts to the visitor's local time (e.g., "Good Morning", "Good Evening").
 
 ### 🧠 Intelligent AI Agent
 ![Chatbot Interface](imgs/site_chatbot.png)

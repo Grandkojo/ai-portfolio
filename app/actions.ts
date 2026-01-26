@@ -123,26 +123,4 @@ export async function chatWithGemini(messages: { role: "user" | "model"; parts: 
     }
 }
 
-export async function getUserLocation() {
-    try {
-        const headersList = headers();
-        const forwardedFor = headersList.get("x-forwarded-for");
-        // If local, might be ::1 or 127.0.0.1, which ipapi won't like. 
-        // fallback to fetch without IP (server IP) if no forwarded header, or handle localhost.
-        const ip = forwardedFor ? forwardedFor.split(",")[0].trim() : null;
 
-        let url = 'https://ipapi.co/json/';
-        if (ip && ip !== '::1' && ip !== '127.0.0.1') {
-            url = `https://ipapi.co/${ip}/json/`;
-        }
-
-        const response = await fetch(url);
-        if (!response.ok) return null;
-
-        const data = await response.json();
-        return data.country_code;
-    } catch (error) {
-        console.error("Location Error:", error);
-        return null;
-    }
-}

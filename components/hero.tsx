@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Terminal, MessageSquare, Bot, Code2, Sparkles } from "lucide-react";
 import { Typewriter } from "./typewriter";
 import Image from "next/image";
-import { getUserLocation } from "@/app/actions";
+
 
 const heroImages = [
     '/images/hero_portrait.jpg',
@@ -27,48 +27,9 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
     }, []);
 
     useEffect(() => {
-        const updateGreeting = async () => {
-            const hours = new Date().getHours();
-            const timeGreeting = hours < 12 ? "Good Morning" : hours < 18 ? "Good Afternoon" : "Good Evening";
-
-            try {
-                // Default to time-based first
-                setGreeting(timeGreeting);
-
-                // Try to get location from server action
-                const country = await getUserLocation();
-
-                const greetings: Record<string, string> = {
-                    GH: "Akwaaba", // Ghana
-                    FR: "Bonjour", // France
-                    ES: "Hola",    // Spain
-                    DE: "Guten Tag", // Germany
-                    JP: "Konnichiwa", // Japan
-                    CN: "Ni Hao",  // China
-                    KR: "Annyeonghaseyo", // Korea
-                    IN: "Namaste", // India
-                    SA: "As-salamu alaykum", // Saudi Arabia
-                    AE: "As-salamu alaykum", // UAE
-                    IT: "Ciao",    // Italy
-                    PT: "Olá",     // Portugal
-                    BR: "Olá",     // Brazil
-                    RU: "Privet",  // Russia
-                    NL: "Hallo",   // Netherlands
-                    SE: "Hej",     // Sweden
-                    NO: "Hei",     // Norway
-                    DK: "Hej",     // Denmark
-                };
-
-                if (country && greetings[country]) {
-                    setGreeting(greetings[country]);
-                }
-            } catch (error) {
-                // Fallback to time-based greeting is already set
-                console.log("Using time-based greeting");
-            }
-        };
-
-        updateGreeting();
+        const hours = new Date().getHours();
+        const timeGreeting = hours < 12 ? "Good Morning" : hours < 18 ? "Good Afternoon" : "Good Evening";
+        setGreeting(timeGreeting);
     }, []);
 
     const scrollToProjects = () => {
