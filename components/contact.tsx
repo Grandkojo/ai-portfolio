@@ -88,7 +88,7 @@ export function ContactSection() {
     };
 
     return (
-        <section className="py-20 lg:py-32 container mx-auto px-4 relative flex items-center justify-center min-h-[600px] lg:min-h-[800px]">
+        <section id="contact" className="py-20 lg:py-32 container mx-auto px-4 relative flex items-center justify-center min-h-[600px] lg:min-h-[800px]">
             {/* Background Glows */}
             <div className="absolute top-1/4 left-[-100px] w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-primary/20 rounded-full blur-[80px] lg:blur-[120px] -z-10" />
             <div className="absolute bottom-1/4 right-[-100px] w-[300px] lg:w-[500px] h-[300px] lg:h-[500px] bg-accent/10 rounded-full blur-[80px] lg:blur-[120px] -z-10" />

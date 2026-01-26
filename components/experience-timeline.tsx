@@ -19,7 +19,7 @@ export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {
     const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
 
     return (
-        <section ref={containerRef} className="relative py-32 container mx-auto px-4 overflow-hidden">
+        <section id="about" ref={containerRef} className="relative py-32 container mx-auto px-4 overflow-hidden">
             {/* Background Interactivity - Parallax Blobs */}
             <motion.div
                 style={{ y }}

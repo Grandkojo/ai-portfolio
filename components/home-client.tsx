@@ -10,6 +10,7 @@ import { ContactSection } from "@/components/contact";
 import { useState } from "react";
 import { MessageSquare } from "lucide-react";
 import { Project, Skill, Experience } from "@/lib/db";
+import { ServicesTeaser } from "@/components/services-teaser";
 
 interface HomeClientProps {
     projects: Project[];
@@ -31,8 +32,11 @@ export function HomeClient({ projects, skills, experience }: HomeClientProps) {
             <Hero onOpenChat={() => setIsChatOpen(true)} />
             <ProjectsGrid projects={projects} onAskAI={handleAskAI} />
 
-            <SkillsSection skills={skills} />
+            <ServicesTeaser />
+
+            <ExperienceTimeline experience={experience} />
             <EducationSection experience={experience} />
+            <SkillsSection skills={skills} />
 
             <Chatbot
                 isOpen={isChatOpen}
@@ -40,7 +44,6 @@ export function HomeClient({ projects, skills, experience }: HomeClientProps) {
                 initialContext={chatContext}
             />
 
-            <ExperienceTimeline experience={experience} />
             <ContactSection />
 
             {/* Floating Action Button */}

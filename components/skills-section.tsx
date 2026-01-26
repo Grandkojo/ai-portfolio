@@ -58,7 +58,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
             </motion.div>
 
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 max-w-6xl mx-auto">
                 {filteredSkills.map((skill, index) => (
                     <motion.div
                         key={skill.id || index}
@@ -66,7 +66,7 @@ export function SkillsSection({ skills }: SkillsSectionProps) {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.05 }}
-                        className="group p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/30 transition-all hover:-translate-y-1"
+                        className="group p-4 md:p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/30 transition-all hover:-translate-y-1"
                     >
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">

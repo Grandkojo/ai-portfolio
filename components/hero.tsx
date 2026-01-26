@@ -1,12 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Terminal, MessageSquare, Bot, Code2, Sparkles } from "lucide-react";
 import { Typewriter } from "./typewriter";
 
+const heroImages = [
+    '/images/hero_portrait.jpg',
+    '/images/hero-1.jpg',
+    '/images/hero-2.jpg',
+    '/images/hero-3.png',
+    '/images/hero-4.jpg'
+];
+
 export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
     const [greeting, setGreeting] = useState("");
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     useEffect(() => {
         const updateGreeting = async () => {
@@ -100,7 +116,7 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, delay: 0.4 }}
-                            className="text-base md:text-xl text-muted-foreground mb-10 max-w-2xl leading-relaxed"
+                            className="text-base md:text-xl text-muted-foreground mb-10 max-w-2xl leading-relaxed mx-5 lg:mx-0"
                         >
                             Software Engineer specializing in <span className="text-white font-medium">Backend Systems</span> & <span className="text-white font-medium">AI</span>.
                             <br className="hidden md:block" />
@@ -113,14 +129,29 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                             transition={{ duration: 0.8, delay: 0.6 }}
                             className="flex flex-col sm:flex-row gap-4 w-[85%]"
                         >
-                            <button
+                            <motion.button
                                 onClick={onOpenChat}
-                                className="group relative px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-primary text-white font-bold transition-all hover:scale-105 hover:shadow-[0_0_40px_rgba(157,78,221,0.5)] flex items-center justify-center gap-2 overflow-hidden"
+                                animate={{
+                                    boxShadow: [
+                                        "0 0 0px rgba(157,78,221,0)",
+                                        "0 0 20px rgba(157,78,221,0.4)",
+                                        "0 0 0px rgba(157,78,221,0)"
+                                    ]
+                                }}
+                                transition={{
+                                    duration: 3,
+                                    repeat: Infinity,
+                                    repeatType: "reverse",
+                                    ease: "easeInOut"
+                                }}
+                                whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(157,78,221,0.6)" }}
+                                whileTap={{ scale: 0.95 }}
+                                className="group relative px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-primary text-white font-bold flex items-center justify-center gap-2 overflow-hidden"
                             >
                                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                                <Bot size={20} />
+                                <Bot size={20} className="animate-bounce" />
                                 Chat with my AI
-                            </button>
+                            </motion.button>
                             <button
                                 onClick={scrollToProjects}
                                 className="group px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-white/5 border border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm flex items-center justify-center gap-2 hover:border-primary/50"
@@ -137,21 +168,29 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 1, delay: 0.4 }}
-                        className="flex-1 relative w-full max-w-md lg:max-w-lg aspect-[3/4] lg:h-[600px] flex items-end justify-center -mt-12 lg:-mt-48"
+                        className="flex-1 relative w-full max-w-md lg:max-w-lg aspect-[3/4] lg:h-[600px] flex items-end justify-center mt-8 lg:mt-12"
                     >
                         {/* Rim Light Effect behind the subject */}
                         <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-60 blur-3xl z-0" />
 
                         {/* Image Container with Gradient Masks */}
                         <div className="relative w-full h-full z-10 rounded-3xl overflow-hidden lg:overflow-visible">
-                            <div
-                                className="absolute inset-0 bg-contain bg-no-repeat bg-bottom z-10"
-                                style={{
-                                    backgroundImage: "url('/images/hero_portrait.jpg')",
-                                    maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
-                                    WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)"
-                                }}
-                            />
+                            <AnimatePresence mode="popLayout">
+                                <motion.div
+                                    key={currentImageIndex}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 1 }}
+                                    className="absolute inset-0 bg-cover bg-center z-10"
+                                    style={{
+                                        backgroundImage: `url('${heroImages[currentImageIndex]}')`,
+                                        maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
+                                        WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)"
+                                    }}
+                                />
+                            </AnimatePresence>
+
                             {/* Overlay to darken and tint the image slightly to fit the void */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20" />
                             <div className="absolute inset-0 bg-primary/5 mix-blend-overlay z-20" />
