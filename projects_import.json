@@ -1,0 +1,452 @@
+[
+    {
+        "slug": "feverdiff-ai",
+        "title": "FeverDiff AI",
+        "description": "AI-powered differential diagnosis assistant for malaria, dengue, chikungunya, and typhoid in Ghana.",
+        "imageUrl": "/images/projects/feverdiff.png",
+        "projectUrl": "https://feverdiff.grandkojo.my",
+        "githubUrl": "https://github.com/Grandkojo/feverdiff-ai",
+        "tech": [
+            "MedGemma 1.5",
+            "Gemini 2.5",
+            "FastAPI",
+            "Modal Labs"
+        ],
+        "order": 1,
+        "details": {
+            "problem": "In Ghana, overlapping fever symptoms between malaria, dengue, chikungunya, and typhoid lead to dangerous misdiagnosis. Rural clinics lack specialist support for differential diagnosis.",
+            "fullOverview": "FeverDiff AI is a clinical decision-support tool designed specifically for Ghana's resource-limited healthcare settings. It uses fine-tuned MedGemma 1.5 with a hybrid AI approach combining LLM reasoning and deterministic clinical rules.",
+            "features": [
+                {
+                    "title": "MedGemma 1.5 & Gemini Reasoning",
+                    "description": "Core clinical reasoning powered by specialized medical LLMs for structured diagnosis."
+                },
+                {
+                    "title": "Ghana-Specific Scoring",
+                    "description": "Tailored logic reflecting regional epidemiological patterns and seasonal disease weighting."
+                },
+                {
+                    "title": "Researcher Workspace",
+                    "description": "Direct JSON import for rapid test scenario validation and pre-defined clinical test cases."
+                }
+            ],
+            "techStack": [
+                {
+                    "category": "AI Models",
+                    "tech": "MedGemma 1.5 4B, Gemini 2.5-Flash"
+                },
+                {
+                    "category": "Backend",
+                    "tech": "FastAPI on Modal Labs (GPU T4)"
+                },
+                {
+                    "category": "Frontend",
+                    "tech": "Vanilla JS, Glassmorphism CSS"
+                }
+            ],
+            "workflow": [
+                "Patient data entry of 26+ clinical variables",
+                "MedGemma handles initial inference",
+                "Deterministic Clinical Rule Integration (CRI) validates results",
+                "Co-infection alert triggered if probabilities are statistically indistinguishable"
+            ],
+            "roadmap": [
+                {
+                    "task": "Fine-tune MedGemma 1.5",
+                    "status": "completed"
+                },
+                {
+                    "task": "Implement CRI logic",
+                    "status": "completed"
+                },
+                {
+                    "task": "Deploy to Modal with GPU caching",
+                    "status": "completed"
+                },
+                {
+                    "task": "User testing with clinical partners",
+                    "status": "planned"
+                }
+            ],
+            "architecture": "Serverless backend on Modal Labs using GPU T4 for fast inference ( < 2s). Volume caching ensures model weights remain warm.",
+            "projectStructure": "├── modal_backend.py (Inference Logic)\n├── model.py (Clinical Rules)\n├── static/ (High-fidelity UI)\n└── test_scenarios.json",
+            "disclaimer": "FeverDiff AI is a decision-support tool and NOT a replacement for professional medical diagnosis. Always consult qualified healthcare professionals.",
+            "videoUrl": ""
+        }
+    },
+    {
+        "slug": "episcope",
+        "title": "EpiScope",
+        "description": "AI-driven platform for monitoring and predicting disease outbreaks using machine learning and RAG.",
+        "imageUrl": "/images/projects/episcope.png",
+        "projectUrl": "",
+        "githubUrl": "https://github.com/Grandkojo/EpiScope.git",
+        "tech": [
+            "Django",
+            "XGBoost",
+            "Gemini",
+            "PostgreSQL"
+        ],
+        "order": 2,
+        "details": {
+            "problem": "Predicting disease distribution and understanding the 'why' behind outbreaks is difficult for healthcare decision-makers without specialized tools.",
+            "fullOverview": "EpiScope enables hospitals to predict disease risk based on patient data, explore historical trends through dynamic visualizations, and understand predictions via SHAP explainability.",
+            "features": [
+                {
+                    "title": "XGBoost Prediction",
+                    "description": "High-accuracy prediction for target diseases like Malaria and Diabetes."
+                },
+                {
+                    "title": "Interactive Dashboards",
+                    "description": "Dynamic exploration of Ghanian health hotspots using Plotly/Dash."
+                },
+                {
+                    "title": "Model Explainability (SHAP)",
+                    "description": "Visualizes exactly which features influenced a specific prediction."
+                }
+            ],
+            "techStack": [
+                {
+                    "category": "Backend",
+                    "tech": "Django (Python), PostgreSQL"
+                },
+                {
+                    "category": "AI/ML",
+                    "tech": "XGBoost, Google Gemini API, SHAP"
+                },
+                {
+                    "category": "Cloud",
+                    "tech": "Google Vertex AI, Docker"
+                }
+            ],
+            "workflow": [
+                "Clinician enters patient demographics and symptoms",
+                "XGBoost calculates probability score",
+                "SHAP generates feature importance graphs",
+                "Gemini provides a plain-English summary of the case"
+            ],
+            "roadmap": [
+                {
+                    "task": "XGBoost Implementation",
+                    "status": "completed"
+                },
+                {
+                    "task": "SHAP Integration",
+                    "status": "completed"
+                },
+                {
+                    "task": "Ghana Map Visualization",
+                    "status": "completed"
+                },
+                {
+                    "task": "LSTM Forecasting",
+                    "status": "planned"
+                }
+            ],
+            "architecture": "Hybrid AI architecture combining deterministic ML (XGBoost) with Generative AI (Gemini) for both precision and interpretation.",
+            "projectStructure": "├── epi_app/ (Django App)\n├── models/ (Serialized ML models)\n├── dashboards/ (Plotly graphs)\n└── templates/ (Frontend views)",
+            "videoUrl": "https://youtu.be/KRDk5LWtfSo"
+        }
+    },
+    {
+        "slug": "quickqr",
+        "title": "QuickQR",
+        "description": "File sharing platform with instant QR code generation and real-time view tracking.",
+        "imageUrl": "/images/projects/quickqr.png",
+        "projectUrl": "https://quickqr.grandkojo.my",
+        "githubUrl": "https://github.com/Grandkojo/QuickQR",
+        "tech": [
+            "Next.js",
+            "Firebase",
+            "NextAuth",
+            "Tailwind"
+        ],
+        "order": 3,
+        "details": {
+            "problem": "Sharing local files instantly with mobile devices during meetings or presentations is often cumbersome and lacks tracking.",
+            "fullOverview": "QuickQR is a focused utility that converts files into instantly scannable and trackable assets using QR codes and Firebase persistence.",
+            "features": [
+                {
+                    "title": "Instant QR Generation",
+                    "description": "QR codes link directly to file shareable URLs for immediate mobile access."
+                },
+                {
+                    "title": "View Tracking",
+                    "description": "Real-time analytics on how many times each QR code has been scanned."
+                },
+                {
+                    "title": "Secure Dashboard",
+                    "description": "Managed authentication where users only access their own uploads."
+                }
+            ],
+            "techStack": [
+                {
+                    "category": "Framework",
+                    "tech": "Next.js 14, Tailwind CSS"
+                },
+                {
+                    "category": "Database/Auth",
+                    "tech": "Firebase Firestore, Storage, NextAuth"
+                },
+                {
+                    "category": "Tools",
+                    "tech": "Framer Motion, Qrcode library"
+                }
+            ],
+            "workflow": [
+                "User uploads file to secure storage",
+                "System generates unique scannable QR code",
+                "Analytic service tracks 'visits' on redirect",
+                "User monitors scans in the admin panel"
+            ],
+            "roadmap": [
+                {
+                    "task": "Core Upload Functionality",
+                    "status": "completed"
+                },
+                {
+                    "task": "QR Generation engine",
+                    "status": "completed"
+                },
+                {
+                    "task": "Super Admin Mode",
+                    "status": "completed"
+                },
+                {
+                    "task": "Bulk QR Generation",
+                    "status": "planned"
+                }
+            ],
+            "security": "Firebase Security Rules enforced per-user; NextAuth handles session integrity.",
+            "projectStructure": "├── app/admin/ (Management UI)\n├── app/[id]/ (QR Redirect logic)\n└── components/ (Upload controls)"
+        }
+    },
+    {
+        "slug": "polling-app",
+        "title": "Polling App",
+        "description": "Real-time shareable polls with instant QR codes and live results visualization.",
+        "imageUrl": "/images/projects/polling_app.png",
+        "projectUrl": "https://polling.grandkojo.my/",
+        "githubUrl": "https://github.com/Grandkojo/polling_app.git",
+        "tech": [
+            "Next.js",
+            "Supabase",
+            "NextAuth",
+            "Chart.js"
+        ],
+        "order": 4,
+        "details": {
+            "problem": "Collecting fast, low-friction audience feedback during events often lacks real-time visualization and easy sharing.",
+            "fullOverview": "A high-performance polling application leveraging Next.js Server Actions and Supabase Realtime for a seamless voting experience.",
+            "features": [
+                {
+                    "title": "Real-time Voting",
+                    "description": "Poll results update instantly across all connected clients without page refreshes."
+                },
+                {
+                    "title": "Result Visualization",
+                    "description": "Beautiful charts powered by Chart.js showing live vote distribution."
+                },
+                {
+                    "title": "Role Management",
+                    "description": "Admin vs regular user permissions for poll moderation and creation."
+                }
+            ],
+            "techStack": [
+                {
+                    "category": "Platform",
+                    "tech": "Next.js 15, React 19"
+                },
+                {
+                    "category": "Backend",
+                    "tech": "Supabase (Postgres, RLS, Realtime)"
+                },
+                {
+                    "category": "Visualization",
+                    "tech": "Chart.js, Tailwind CSS"
+                }
+            ],
+            "workflow": [
+                "Admin creates poll with multiple options",
+                "QR code shared with audience members",
+                "Users vote via single-click server actions",
+                "Real-time chart updates for all viewers"
+            ],
+            "roadmap": [
+                {
+                    "task": "Server Action Voting",
+                    "status": "completed"
+                },
+                {
+                    "task": "Real-time Results UX",
+                    "status": "completed"
+                },
+                {
+                    "task": "Role management",
+                    "status": "completed"
+                },
+                {
+                    "task": "Email notifications",
+                    "status": "planned"
+                }
+            ],
+            "projectStructure": "├── app/polls/ (Voting UI)\n├── app/api/polls/ (CRUD Endpoints)\n└── lib/supabase.ts (Client Config)"
+        }
+    },
+    {
+        "title": "MedForecast",
+        "slug": "medforecast",
+        "description": "An AI-powered health prediction system that assists in identifying medical conditions based on symptom analysis and historical data.",
+        "imageUrl": "/images/projects/medfc_logo.png",
+        "projectUrl": "",
+        "githubUrl": "https://github.com/Grandkojo/MedForecast",
+        "tech": [
+            "Flask",
+            "Supabase",
+            "Bootstrap",
+            "Python",
+            "PostgreSQL"
+        ],
+        "order": 5,
+        "details": {
+            "problem": "Medical conditions are often caught too late due to a lack of immediate, accessible diagnostic assistance. MedForecast aims to bridge this gap by providing early-stage insights based on clinical data.",
+            "fullOverview": "MedForecast is a comprehensive health prediction platform designed to streamline the journey from symptom onset to diagnosis. By leveraging medical datasets, the application provides users with probable health conditions and trending health insights, while offering a robust admin panel for data management.",
+            "features": [
+                {
+                    "title": "Health Prediction Model",
+                    "description": "Dynamic symptom-to-risk prediction using clinical datasets."
+                },
+                {
+                    "title": "Medical History Tracking",
+                    "description": "Secure storage and retrieval of previous diagnostic results for patient monitoring."
+                },
+                {
+                    "title": "Condition Explanations",
+                    "description": "AI-generated summaries of potential health conditions for better patient understanding."
+                },
+                {
+                    "title": "Trending Diseases",
+                    "description": "Real-time updates on prevalent health conditions in the region."
+                }
+            ],
+            "techStack": [
+                {
+                    "category": "Framework",
+                    "tech": "Flask (Python)"
+                },
+                {
+                    "category": "Database",
+                    "tech": "Supabase (PostgreSQL)"
+                },
+                {
+                    "category": "Frontend",
+                    "tech": "Bootstrap & Vanilla JavaScript"
+                }
+            ],
+            "workflow": [
+                "User registration and secure login.",
+                "Completion of a dynamic health inquiry form.",
+                "Model processing of symptoms and historical data.",
+                "Generation of predicted diagnosis and accuracy metrics.",
+                "Storage of results in the user's medical history dashboard."
+            ],
+            "roadmap": [
+                {
+                    "task": "Integration of advanced LLM for clinical reasoning",
+                    "status": "planned"
+                },
+                {
+                    "task": "Mobile app companion for health tracking",
+                    "status": "planned"
+                },
+                {
+                    "task": "API endpoints for external clinical integration",
+                    "status": "in-progress"
+                }
+            ],
+            "architecture": "MedForecast follows a modular monolithic architecture using Flask as the central orchestrator and Supabase for high-performance data persistence and authentication.",
+            "projectStructure": "MEDFORECAST/\n│\n├── src/                # Core logic & prediction models\n├── static/             # Assets and styling\n├── templates/          # HTML views\n├── views/              # Route handlers\n└── app.py              # Application entry point",
+            "security": "User data is protected via Supabase Auth and RLS (Row Level Security) to ensure medical histories are only accessible by authorized users.",
+            "disclaimer": "This system provides predictions for informational purposes only and is not a substitute for professional clinical advice.",
+            "videoUrl": ""
+        }
+    },
+    {
+        "title": "Hub Map GH",
+        "slug": "hubmap",
+        "description": "Ghana Tech Ecosystem Directory — The definitive community-maintained directory of co-working spaces, incubators, accelerators, and makerspaces.",
+        "imageUrl": "/images/projects/hubmapgh.png",
+        "projectUrl": "https://hubmapgh.vercel.app",
+        "githubUrl": "https://github.com/Grandkojo/hubmapgh",
+        "tech": [
+            "Next.js",
+            "Firebase",
+            "Gemini Pro",
+            "Tailwind CSS",
+            "Leaflet"
+        ],
+        "order": 6,
+        "details": {
+            "problem": "Finding verified tech hubs, co-working spaces, and accelerators in Ghana was previously a fragmented process with outdated information.",
+            "fullOverview": "Hub Map GH is a community-driven platform that maps out the Ghanaian tech ecosystem. It features an AI-powered recommender that helps entrepreneurs find the perfect space using natural language, and an admin console for verifying crowd-sourced data.",
+            "features": [
+                {
+                    "title": "AI Hub Matching",
+                    "description": "Natural language search for hubs using Google Gemini Pro for intelligent recommendations."
+                },
+                {
+                    "title": "Interactive Ecosystem Map",
+                    "description": "Live mapping of hubs with Leaflet, providing a visual directory of tech spaces."
+                },
+                {
+                    "title": "Admin Moderation",
+                    "description": "Secure dashboard to approve community submissions and manage ecosystem metadata."
+                },
+                {
+                    "title": "Performance Optimization",
+                    "description": "Multi-layer caching achieving sub-50ms map loads for a seamless user experience."
+                }
+            ],
+            "techStack": [
+                {
+                    "category": "Core Framework",
+                    "tech": "Next.js 14 (App Router)"
+                },
+                {
+                    "category": "Backend & Auth",
+                    "tech": "Firebase (Firestore, Auth)"
+                },
+                {
+                    "category": "AI Engine",
+                    "tech": "Google Gemini Pro"
+                }
+            ],
+            "workflow": [
+                "Ecosystem exploration via interactive map.",
+                "AI-powered search for specific hub needs.",
+                "Community submission of new tech spaces.",
+                "Admin verification and live updates.",
+                "Fast retrieval via optimized caching layers."
+            ],
+            "roadmap": [
+                {
+                    "task": "Global expansion for other African tech hubs",
+                    "status": "planned"
+                },
+                {
+                    "task": "Mobile application (React Native)",
+                    "status": "planned"
+                },
+                {
+                    "task": "Real-time hub availability & booking",
+                    "status": "in-progress"
+                }
+            ],
+            "architecture": "A modern serverless architecture utilizing Next.js App Router, with Firebase for real-time data and Gemini for AI intelligence.",
+            "projectStructure": "src/\n├── app/ (Routes & Admin)\n├── components/ (AI Recommender, Map)\n├── context/ (Auth State)\n└── lib/ (Firebase & Caching Logic)",
+            "security": "Admin console is protected by Firebase Auth with IP-based AI usage limiting to prevent abuse.",
+            "disclaimer": "This is a community-maintained project. Information is verified by the Hub Map GH team but subject to change.",
+            "videoUrl": ""
+        }
+    }
+]

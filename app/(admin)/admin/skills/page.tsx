@@ -4,9 +4,11 @@ import { revalidateSkills } from "@/app/actions";
 import { SkillForm } from "@/components/admin/skill-form";
 import { deleteSkill, Skill, subscribeToSkills } from "@/lib/db";
 import { Edit2, Plus, Trash2, TrendingUp } from "lucide-react";
+import { useNotification } from "@/components/ui/notification-context";
 import { useEffect, useState } from "react";
 
 export default function AdminSkills() {
+    const { showNotification, confirmAction } = useNotification();
     const [skills, setSkills] = useState<Skill[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editingItem, setEditingItem] = useState<Skill | null>(null);
@@ -17,9 +19,21 @@ export default function AdminSkills() {
     }, []);
 
     const handleDelete = async (id: string, name: string) => {
-        if (confirm(`Are you sure you want to delete ${name}?`)) {
-            await deleteSkill(id);
-            await revalidateSkills();
+        const confirmed = await confirmAction({
+            title: 'Delete Skill',
+            message: `Are you sure you want to delete "${name}"? This will remove it from your skills list.`,
+            confirmText: 'Delete',
+            type: 'danger'
+        });
+
+        if (confirmed) {
+            try {
+                await deleteSkill(id);
+                await revalidateSkills();
+                showNotification(`Deleted ${name}`, "success");
+            } catch (error) {
+                showNotification("Failed to delete skill", "error");
+            }
         }
     };
 

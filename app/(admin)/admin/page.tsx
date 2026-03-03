@@ -5,8 +5,10 @@ import { addProject, addExperience, addSkill, Skill, subscribeToVisits, subscrib
 import { useEffect, useState } from "react";
 import { Database } from "lucide-react";
 import Link from "next/link";
+import { useNotification } from "@/components/ui/notification-context";
 
 export default function AdminDashboard() {
+    const { showNotification, confirmAction } = useNotification();
     const [seeding, setSeeding] = useState(false);
 
     // Stats State
@@ -33,7 +35,15 @@ export default function AdminDashboard() {
     }, []);
 
     const handleSeed = async () => {
-        if (!confirm("This will DELETE ALL EXISTING DATA and reseeding from code. Continue?")) return;
+        const confirmed = await confirmAction({
+            title: 'Reseed Database',
+            message: 'This will DELETE ALL EXISTING DATA and reseeding from local source code. This action is irreversible.',
+            confirmText: 'Yes, Reset & Seed',
+            type: 'danger'
+        });
+
+        if (!confirmed) return;
+
         setSeeding(true);
         try {
             // Clear existing data
@@ -52,7 +62,9 @@ export default function AdminDashboard() {
                     imageUrl: project.imageUrl || "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2070&auto=format&fit=crop",
                     projectUrl: project.links.demo,
                     githubUrl: project.links.github,
-                    order: index + 1
+                    order: index + 1,
+                    // Slugs are important now
+                    slug: project.title.toLowerCase().replace(/ /g, "-")
                 });
             }
 
@@ -78,10 +90,10 @@ export default function AdminDashboard() {
                 }
             }
 
-            alert("Database seeded successfully!");
+            showNotification("Database seeded successfully!", "success");
         } catch (error) {
             console.error("Seeding Error:", error);
-            alert("Error seeding database check console");
+            showNotification("Error seeding database. Check console for details.", "error");
         } finally {
             setSeeding(false);
         }
@@ -105,31 +117,26 @@ export default function AdminDashboard() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* Visits (No link for now, maybe analytics page later) */}
                 <div className="p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/50 transition-colors">
                     <h3 className="text-sm font-medium text-white/50 mb-2">Total Visits</h3>
                     <p className="text-4xl font-bold text-white">{visits.toLocaleString()}</p>
                 </div>
 
-                {/* Projects */}
                 <Link href="/admin/projects" className="p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/50 transition-colors block group">
                     <h3 className="text-sm font-medium text-white/50 mb-2 group-hover:text-primary transition-colors">Projects</h3>
                     <p className="text-4xl font-bold text-accent">{projectCount}</p>
                 </Link>
 
-                {/* Experience */}
                 <Link href="/admin/experience" className="p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/50 transition-colors block group">
                     <h3 className="text-sm font-medium text-white/50 mb-2 group-hover:text-primary transition-colors">Experience</h3>
                     <p className="text-4xl font-bold text-blue-400">{experienceCount}</p>
                 </Link>
 
-                {/* Skills */}
                 <Link href="/admin/skills" className="p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/50 transition-colors block group">
                     <h3 className="text-sm font-medium text-white/50 mb-2 group-hover:text-primary transition-colors">Skills</h3>
                     <p className="text-4xl font-bold text-green-400">{skillCount}</p>
                 </Link>
 
-                {/* Messages */}
                 <Link href="/admin/messages" className="p-6 rounded-2xl bg-white/5 border border-white/20 hover:border-primary/50 transition-colors block group">
                     <h3 className="text-sm font-medium text-white/50 mb-2 group-hover:text-primary transition-colors">Messages</h3>
                     <p className="text-4xl font-bold text-primary">{messageCount}</p>

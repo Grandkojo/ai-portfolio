@@ -1,28 +1,41 @@
 "use client";
 
+import { useNotification } from "@/components/ui/notification-context";
 import { ProjectForm } from "@/components/admin/project-form";
-import { deleteProject, Project, subscribeToProjects } from "@/lib/db";
-import { Edit2, ExternalLink, Github, Plus, Trash2 } from "lucide-react";
-import { revalidateProjects } from "@/app/actions";
+import { addProject, deleteProject, Project, subscribeToProjects } from "@/lib/db";
+import { Database, Edit2, ExternalLink, Github, Plus, Trash2, Upload } from "lucide-react";
+import { revalidateProjects, importProjects } from "@/app/actions";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function AdminProjects() {
+    const { showNotification, confirmAction } = useNotification();
     const [projects, setProjects] = useState<Project[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editingProject, setEditingProject] = useState<Project | null>(null);
+    const [isMigrating, setIsMigrating] = useState(false);
 
     useEffect(() => {
         const unsubscribe = subscribeToProjects(setProjects);
         return () => unsubscribe();
     }, []);
 
-
-
     const handleDelete = async (id: string, title: string) => {
-        if (confirm(`Are you sure you want to delete "${title}"?`)) {
-            await deleteProject(id);
-            await revalidateProjects();
+        const confirmed = await confirmAction({
+            title: 'Delete Project',
+            message: `Are you sure you want to delete "${title}"? This action cannot be undone.`,
+            confirmText: 'Delete',
+            type: 'danger'
+        });
+
+        if (confirmed) {
+            try {
+                await deleteProject(id);
+                await revalidateProjects();
+                showNotification(`Deleted ${title}`, "success");
+            } catch (error) {
+                showNotification("Failed to delete project", "error");
+            }
         }
     };
 
@@ -41,10 +54,46 @@ export default function AdminProjects() {
         setEditingProject(null);
     };
 
+    const handleBulkImport = async () => {
+        const confirmed = await confirmAction({
+            title: 'Bulk Import',
+            message: 'This will import/overwrite projects from projects_import.json. Continue?',
+            confirmText: 'Import Now',
+            type: 'info'
+        });
+
+        if (!confirmed) return;
+
+        setIsMigrating(true);
+        try {
+            const result = await importProjects();
+            if (result.success && result.projects) {
+                let successCount = 0;
+                for (const project of result.projects) {
+                    try {
+                        await addProject(project);
+                        successCount++;
+                    } catch (err) {
+                        console.error(`Failed to import ${project.title}:`, err);
+                    }
+                }
+                await revalidateProjects();
+                showNotification(`Successfully imported ${successCount} projects!`, "success");
+            } else {
+                showNotification(`Import failed: ${result.error}`, "error");
+            }
+        } catch (error) {
+            console.error(error);
+            showNotification("An error occurred during import.", "error");
+        } finally {
+            setIsMigrating(false);
+        }
+    };
+
     if (isEditing) {
         return (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-                <div className="w-full max-w-2xl relative">
+                <div className="w-full max-w-2xl max-h-[90vh] overflow-y-auto relative">
                     <button
                         onClick={() => setIsEditing(false)}
                         className="absolute -top-12 left-0 text-sm text-white/50 hover:text-white flex items-center gap-2"
@@ -68,13 +117,28 @@ export default function AdminProjects() {
                     <h1 className="text-3xl font-bold text-white mb-2">Projects</h1>
                     <p className="text-white/60">Manage your capabilities and case studies.</p>
                 </div>
-                <button
-                    onClick={handleCreate}
-                    className="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-colors flex items-center gap-2"
-                >
-                    <Plus size={18} />
-                    Add Project
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={handleBulkImport}
+                        disabled={isMigrating}
+                        className="px-4 py-2 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
+                        title="Import from projects_import.json"
+                    >
+                        {isMigrating ? (
+                            <Database size={18} className="animate-pulse" />
+                        ) : (
+                            <Upload size={18} />
+                        )}
+                        Bulk Import
+                    </button>
+                    <button
+                        onClick={handleCreate}
+                        className="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-bold rounded-lg transition-colors flex items-center gap-2"
+                    >
+                        <Plus size={18} />
+                        Add Project
+                    </button>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

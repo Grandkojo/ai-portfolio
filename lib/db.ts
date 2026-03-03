@@ -13,7 +13,8 @@ import {
     getDoc,
     onSnapshot,
     writeBatch,
-    serverTimestamp
+    serverTimestamp,
+    where
 } from "firebase/firestore";
 
 // --- HELPERS ---
@@ -51,6 +52,20 @@ export interface Project {
     githubUrl: string;
     tech: string[];
     order: number;
+    slug?: string;
+    details?: {
+        problem?: string;
+        fullOverview?: string;
+        features?: { title: string; description: string }[];
+        techStack?: { category: string; tech: string }[];
+        workflow?: string[];
+        roadmap?: { task: string; status: "planned" | "in-progress" | "completed" }[];
+        architecture?: string;
+        projectStructure?: string;
+        security?: string;
+        disclaimer?: string;
+        videoUrl?: string;
+    };
 }
 
 export interface Experience {
@@ -111,12 +126,14 @@ export const incrementVisits = async () => {
 export const addProject = async (data: Project) => {
     if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
         console.log("MOCK: Adding project", data);
-        return { id: "mock-id" };
+        return { id: data.slug || "mock-id" };
     }
     try {
-        const docRef = await addDoc(collection(db, "projects"), data);
-        console.log("Firestore: Project added with ID:", docRef.id);
-        return docRef;
+        if (!data.slug) throw new Error("Project slug is required for ID");
+        const docRef = doc(db, "projects", data.slug);
+        await setDoc(docRef, data);
+        console.log("Firestore: Project added with ID (slug):", data.slug);
+        return { id: data.slug };
     } catch (e) {
         console.error("Firestore Error adding project:", e);
         throw e;
@@ -288,6 +305,24 @@ export const getProjects = async (): Promise<Project[]> => {
     } catch (e) {
         console.error("Error fetching projects:", e);
         return [];
+    }
+};
+
+export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
+    if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
+        // Mock fallback if keys missing
+        const projects = await getProjects();
+        return projects.find(p => p.slug === slug) || null;
+    }
+    try {
+        const docRef = doc(db, "projects", slug);
+        const docSnap = await getDoc(docRef);
+
+        if (!docSnap.exists()) return null;
+        return { id: docSnap.id, ...docSnap.data() } as Project;
+    } catch (e) {
+        console.error(`Error fetching project by slug ${slug}:`, e);
+        return null;
     }
 };
 

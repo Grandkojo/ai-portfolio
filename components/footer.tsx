@@ -13,7 +13,7 @@ export function Footer() {
             {/* Background Atmosphere */}
             <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent pointer-events-none" />
 
-            <div className="container mx-auto px-4 py-12 md:py-16 relative z-10">
+            <div className="max-w-7xl mx-auto px-4 py-12 md:py-16 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
 
                     {/* Column 1: Identity */}

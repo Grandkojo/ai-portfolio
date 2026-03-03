@@ -2,9 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Message, subscribeToMessages, deleteMessage } from "@/lib/db";
-import { Trash2, Mail, Phone, Calendar, User, MessageSquare } from "lucide-react";
+import { Trash2, Mail, Phone, Calendar, MessageSquare } from "lucide-react";
+import { useNotification } from "@/components/ui/notification-context";
 
 export default function AdminMessages() {
+    const { showNotification, confirmAction } = useNotification();
     const [messages, setMessages] = useState<Message[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -17,8 +19,20 @@ export default function AdminMessages() {
     }, []);
 
     const handleDelete = async (id: string) => {
-        if (confirm("Delete this message?")) {
-            await deleteMessage(id);
+        const confirmed = await confirmAction({
+            title: 'Delete Message',
+            message: 'Are you sure you want to delete this message? This action is permanent.',
+            confirmText: 'Delete',
+            type: 'danger'
+        });
+
+        if (confirmed) {
+            try {
+                await deleteMessage(id);
+                showNotification("Message deleted", "success");
+            } catch (error) {
+                showNotification("Failed to delete message", "error");
+            }
         }
     };
 

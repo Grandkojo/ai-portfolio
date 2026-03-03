@@ -7,10 +7,11 @@ import { EducationSection } from "@/components/education-section";
 import { Chatbot } from "@/components/chatbot";
 import { ExperienceTimeline } from "@/components/experience-timeline";
 import { ContactSection } from "@/components/contact";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageSquare } from "lucide-react";
 import { Project, Skill, Experience } from "@/lib/db";
 import { ServicesTeaser } from "@/components/services-teaser";
+import { useSearchParams } from "next/navigation";
 
 interface HomeClientProps {
     projects: Project[];
@@ -21,6 +22,15 @@ interface HomeClientProps {
 export function HomeClient({ projects, skills, experience }: HomeClientProps) {
     const [isChatOpen, setIsChatOpen] = useState(false);
     const [chatContext, setChatContext] = useState("");
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const chatMsg = searchParams.get("chat");
+        if (chatMsg) {
+            setChatContext(decodeURIComponent(chatMsg));
+            setIsChatOpen(true);
+        }
+    }, [searchParams]);
 
     const handleAskAI = (context: string) => {
         setChatContext(context);

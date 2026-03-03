@@ -41,10 +41,14 @@ service cloud.firestore {
       allow write: if isAuthenticated();
     }
     
-    // Analytics: Public Read (for now), Admin Write
+    // Analytics: Public Read, Admin Write (with strict public increment for site_stats)
     match /analytics/{docID} {
       allow read: if true;
-      allow write: if true; // Keeping open for visits increment for now, could be tighter
+      allow write: if isAuthenticated();
+      // Allow public to ONLY increment visits in site_stats
+      allow update: if docID == 'site_stats' && 
+                     request.resource.data.diff(resource.data).affectedKeys().hasOnly(['visits']) &&
+                     request.resource.data.visits == resource.data.visits + 1;
     }
 
     // Messages: Admin Read/Delete, Public Create (with validation)
@@ -54,9 +58,11 @@ service cloud.firestore {
       allow update: if false; // Messages shouldn't change after sending
     }
 
-    // Rate Limits: Open for Server Actions (acting as client) to track usage
+    // Rate Limits: Restricted to Get/Create/Update, No Listing
     match /rate_limits/{ip} {
-      allow read, write: if true;
+      allow get, create, update: if true;
+      allow list: if false; // VERY important: prevents scraping of visitor IPs
+      allow delete: if isAuthenticated();
     }
   }
 }

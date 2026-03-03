@@ -1,11 +1,21 @@
 import type { Metadata } from "next";
-import { Outfit } from "next/font/google";
+import { DM_Sans, Syne } from "next/font/google";
 import "../globals.css";
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
+import { NotificationProvider } from "@/components/ui/notification-context";
 
-const outfit = Outfit({
+const dmSans = DM_Sans({
     subsets: ["latin"],
-    variable: "--font-outfit",
+    weight: ["300", "400", "500"],
+    style: ["normal", "italic"],
+    variable: "--font-dm-sans",
+    display: "swap",
+});
+
+const syne = Syne({
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700", "800"],
+    variable: "--font-syne",
     display: "swap",
 });
 
@@ -22,11 +32,13 @@ export default function AdminLayout({
 }>) {
     return (
         <html lang="en">
-            <body className={`${outfit.variable} antialiased min-h-screen bg-black text-white flex`}>
-                <AdminSidebar />
-                <main className="flex-1 h-screen overflow-y-auto bg-black/50 p-8">
-                    {children}
-                </main>
+            <body className={`${dmSans.variable} ${syne.variable} antialiased min-h-screen bg-black text-white flex`}>
+                <NotificationProvider>
+                    <AdminSidebar />
+                    <main className="flex-1 h-screen overflow-y-auto bg-black/50 p-8">
+                        {children}
+                    </main>
+                </NotificationProvider>
             </body>
         </html>
     );

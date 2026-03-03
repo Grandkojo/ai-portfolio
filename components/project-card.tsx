@@ -1,9 +1,10 @@
 "use client";
 
-import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
-import { Bot, ExternalLink, Github, ArrowUpRight } from "lucide-react";
+import { motion, useMotionValue, useSpring } from "framer-motion";
+import { Bot, ExternalLink, Github, ArrowRight } from "lucide-react";
 import { MouseEvent, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ProjectProps {
     title: string;
@@ -12,6 +13,7 @@ interface ProjectProps {
     tech: string[];
     links: { demo?: string; github?: string };
     imageUrl?: string;
+    slug?: string;
 }
 
 export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectProps; onAskAI: (project: string) => void; index?: number }) {
@@ -28,17 +30,15 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
         if (!containerRef.current) return;
         const { left, top, width, height } = currentTarget.getBoundingClientRect();
 
-        // Calculate rotation based on mouse position
         const centerX = left + width / 2;
         const centerY = top + height / 2;
 
-        const rotateXValue = ((clientY - centerY) / height) * 20; // Max 20deg rotation
+        const rotateXValue = ((clientY - centerY) / height) * 20;
         const rotateYValue = ((clientX - centerX) / width) * -20;
 
         rotateX.set(rotateXValue);
         rotateY.set(rotateYValue);
 
-        // Spotlight calculation
         mouseX.set(clientX - left);
         mouseY.set(clientY - top);
     }
@@ -62,9 +62,9 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
                 rotateX,
                 rotateY,
             }}
-            className="group relative rounded-[2rem] bg-[#050505] border border-white/5 overflow-hidden shadow-2xl hover:shadow-[0_0_50px_rgba(138,43,226,0.15)] transition-shadow duration-500"
+            className="group relative rounded-[2rem] bg-[#050505] border border-white/5 overflow-hidden shadow-2xl hover:shadow-[0_0_50px_rgba(138,43,226,0.15)] transition-shadow duration-500 flex flex-col"
         >
-            {/* Obsidian Reflection (Glass Glare) */}
+            {/* Obsidian Reflection */}
             <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none z-10" />
 
             {/* Inner Glow Border */}
@@ -72,7 +72,7 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
 
             {/* Cover Image */}
             {project.imageUrl && (
-                <div className="relative h-48 w-full overflow-hidden border-b border-white/5">
+                <div className="relative h-48 w-full overflow-hidden border-b border-white/5 flex-shrink-0">
                     <Image
                         src={project.imageUrl}
                         alt={project.title}
@@ -84,7 +84,7 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
                 </div>
             )}
 
-            <div className="relative h-full p-8 flex flex-col z-30">
+            <div className="relative flex-1 p-8 flex flex-col z-30">
                 {/* Header */}
                 <div className="flex justify-between items-start mb-6">
                     <div className="space-y-2">
@@ -101,13 +101,13 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
                                 </span>
                             ))}
                         </div>
-
                     </div>
 
                     <div className="flex gap-3">
                         {project.links.github && (
                             <a
                                 href={project.links.github}
+                                target="_blank"
                                 className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-all hover:scale-110"
                                 title="View Code"
                             >
@@ -117,6 +117,7 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
                         {project.links.demo && (
                             <a
                                 href={project.links.demo}
+                                target="_blank"
                                 className="p-2 rounded-full bg-white/5 hover:bg-white/10 text-white/70 hover:text-white transition-all hover:scale-110"
                                 title="Live Demo"
                             >
@@ -126,19 +127,41 @@ export function ProjectCard({ project, onAskAI, index = 0 }: { project: ProjectP
                     </div>
                 </div>
 
-                {/* Description */}
-                <p className="text-muted-foreground mb-8 leading-relaxed line-clamp-4">
-                    {project.description}
-                </p>
+                {/* Description - flex-1 pushes buttons to bottom */}
+                <div className="flex-1">
+                    <p className="text-muted-foreground mb-8 leading-relaxed line-clamp-4">
+                        {project.description}
+                    </p>
+                </div>
 
-                {/* Action Button */}
-                <button
-                    onClick={() => onAskAI(project.title)}
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-white/20 hover:border-primary/50 text-white font-medium flex items-center justify-center gap-2 transition-all group-hover:shadow-[0_0_20px_rgba(123,44,191,0.2)]"
-                >
-                    <Bot size={18} className="text-primary" />
-                    <span>Ask AI about this project</span>
-                </button>
+                {/* Action Buttons - always at bottom */}
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => onAskAI(project.title)}
+                        className="flex-1 py-3 rounded-xl bg-gradient-to-r from-primary/10 to-accent/10 border border-white/20 hover:border-primary/50 text-white font-medium flex items-center justify-center gap-2 transition-all text-sm"
+                    >
+                        <Bot size={16} className="text-primary" />
+                        <span>Ask AI</span>
+                    </button>
+                    {project.slug ? (
+                        <Link
+                            href={`/projects/${project.slug}`}
+                            className="flex-1 py-3 rounded-xl bg-white/5 border border-white/20 hover:border-primary/50 text-white font-medium flex items-center justify-center gap-2 transition-all text-sm"
+                        >
+                            <span>View Details</span>
+                            <ArrowRight size={16} className="text-primary" />
+                        </Link>
+                    ) : (project.links.demo || project.links.github) ? (
+                        <a
+                            href={project.links.demo || project.links.github || "#"}
+                            target="_blank"
+                            className="flex-1 py-3 rounded-xl bg-white/5 border border-white/20 hover:border-primary/50 text-white font-medium flex items-center justify-center gap-2 transition-all text-sm"
+                        >
+                            <span>View Details</span>
+                            <ArrowRight size={16} className="text-primary" />
+                        </a>
+                    ) : null}
+                </div>
             </div>
         </motion.div>
     );

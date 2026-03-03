@@ -124,3 +124,16 @@ export async function chatWithGemini(messages: { role: "user" | "model"; parts: 
 }
 
 
+
+export async function importProjects() {
+    try {
+        const filePath = path.join(process.cwd(), "projects_import.json");
+        const content = await fs.readFile(filePath, "utf-8");
+        const projects = JSON.parse(content);
+
+        return { success: true, projects, count: projects.length };
+    } catch (error) {
+        console.error("Migration Error:", error);
+        return { success: false, error: String(error) };
+    }
+}

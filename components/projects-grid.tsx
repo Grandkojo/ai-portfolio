@@ -21,7 +21,7 @@ export function ProjectsGrid({ projects, onAskAI }: ProjectsGridProps) {
     };
 
     return (
-        <section id="projects" className="py-20 px-4 container mx-auto">
+        <section id="projects" className="py-20 px-4 max-w-7xl mx-auto">
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -53,7 +53,8 @@ export function ProjectsGrid({ projects, onAskAI }: ProjectsGridProps) {
                             tech: project.tech,
                             description: project.description,
                             links: { demo: project.projectUrl, github: project.githubUrl },
-                            imageUrl: project.imageUrl
+                            imageUrl: project.imageUrl,
+                            slug: project.slug
                         }}
                         onAskAI={(title) => onAskAI(`Tell me about the technical approach for the ${title} project.`)}
                         index={index}

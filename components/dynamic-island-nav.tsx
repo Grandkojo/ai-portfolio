@@ -7,16 +7,17 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const navItems = [
-    { name: "Home", href: "/", icon: <Home size={20} /> },
-    { name: "Projects", href: "/#projects", icon: <Briefcase size={20} /> },
-    { name: "Services", href: "/services", icon: <Cpu size={20} /> },
-    { name: "About", href: "/#about", icon: <User size={20} /> },
-    { name: "Contact", href: "/#contact", icon: <Mail size={20} /> },
+    { name: "Home", href: "/", id: "home", icon: <Home size={20} /> },
+    { name: "Projects", href: "/#projects", id: "projects", icon: <Briefcase size={20} /> },
+    { name: "Services", href: "/services", id: "services", icon: <Cpu size={20} /> },
+    { name: "About", href: "/#about", id: "about", icon: <User size={20} /> },
+    { name: "Contact", href: "/#contact", id: "contact", icon: <Mail size={20} /> },
 ];
 
 export function DynamicIslandNav() {
     const pathname = usePathname();
     const [scrolled, setScrolled] = useState(false);
+    const [activeSection, setActiveSection] = useState("");
 
     useEffect(() => {
         const handleScroll = () => {
@@ -29,19 +30,58 @@ export function DynamicIslandNav() {
         };
     }, []);
 
+    useEffect(() => {
+        if (pathname !== "/") {
+            setActiveSection("");
+            return;
+        }
+
+        const observerOptions = {
+            root: null,
+            rootMargin: "-20% 0px -70% 0px",
+            threshold: 0,
+        };
+
+        const observerCallback = (entries: IntersectionObserverEntry[]) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    setActiveSection(entry.target.id);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+        const sectionIds = ["home", "projects", "about", "contact"];
+        sectionIds.forEach((id) => {
+            const element = document.getElementById(id);
+            if (element) observer.observe(element);
+        });
+
+        // Set initial active section
+        const currentHash = window.location.hash.replace("#", "");
+        if (currentHash && sectionIds.includes(currentHash)) {
+            setActiveSection(currentHash);
+        } else if (window.scrollY < 100) {
+            setActiveSection("home");
+        }
+
+        return () => observer.disconnect();
+    }, [pathname]);
+
     return (
         <>
             <div className="md:hidden">
-                <MobileNav />
+                <MobileNav activeSection={activeSection} pathname={pathname} />
             </div>
             <div className="hidden md:block">
-                <DesktopNav scrolled={scrolled} pathname={pathname} />
+                <DesktopNav scrolled={scrolled} pathname={pathname} activeSection={activeSection} />
             </div>
         </>
     );
 }
 
-function DesktopNav({ scrolled, pathname }: { scrolled: boolean; pathname: string }) {
+function DesktopNav({ scrolled, pathname, activeSection }: { scrolled: boolean; pathname: string; activeSection: string }) {
     return (
         <motion.div
             className={`fixed top-6 left-1/2 z-50 flex items-center gap-1 px-2 py-2 rounded-full border transition-all duration-300 ${scrolled
@@ -51,7 +91,10 @@ function DesktopNav({ scrolled, pathname }: { scrolled: boolean; pathname: strin
             style={{ x: "-50%" }}
         >
             {navItems.map((item) => {
-                const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+                const isActive = item.href === "/services"
+                    ? pathname === "/services"
+                    : pathname === "/" && (activeSection === item.id || (!activeSection && item.id === "home"));
+
                 return (
                     <Link
                         key={item.name}
@@ -76,7 +119,7 @@ function DesktopNav({ scrolled, pathname }: { scrolled: boolean; pathname: strin
     );
 }
 
-function MobileNav() {
+function MobileNav({ activeSection, pathname }: { activeSection: string; pathname: string }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -121,19 +164,25 @@ function MobileNav() {
                             exit={{ opacity: 0, height: 0 }}
                             className="flex flex-col gap-2 mt-4"
                         >
-                            {navItems.map((item) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setIsOpen(false)}
-                                    className="flex items-center gap-4 p-3 rounded-xl hover:bg-white/10 active:bg-white/20 transition-colors"
-                                >
-                                    <div className="p-2 rounded-lg bg-primary/20 text-primary">
-                                        {item.icon}
-                                    </div>
-                                    <span className="text-white font-medium text-lg">{item.name}</span>
-                                </Link>
-                            ))}
+                            {navItems.map((item) => {
+                                const isActive = item.href === "/services"
+                                    ? pathname === "/services"
+                                    : pathname === "/" && (activeSection === item.id || (!activeSection && item.id === "home"));
+
+                                return (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        onClick={() => setIsOpen(false)}
+                                        className={`flex items-center gap-4 p-3 rounded-xl transition-colors ${isActive ? "bg-white/10" : "hover:bg-white/5 active:bg-white/10"}`}
+                                    >
+                                        <div className={`p-2 rounded-lg ${isActive ? "bg-primary text-white" : "bg-primary/20 text-primary"}`}>
+                                            {item.icon}
+                                        </div>
+                                        <span className={`font-medium text-lg ${isActive ? "text-white" : "text-white/60"}`}>{item.name}</span>
+                                    </Link>
+                                );
+                            })}
                         </motion.div>
                     )}
                 </AnimatePresence>

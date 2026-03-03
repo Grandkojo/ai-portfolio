@@ -9,7 +9,6 @@ import Image from "next/image";
 
 const heroImages = [
     '/images/hero_portrait.jpg',
-    '/images/hero-1.jpg',
     '/images/hero-2.jpg',
     '/images/hero-3.png',
     '/images/hero-4.jpg'
@@ -37,12 +36,12 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
     };
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pb-32 pt-20">
+        <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pb-32 pt-20 max-w-[100vw]">
             {/* Background Effects */}
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] mix-blend-screen animate-float z-0" />
             <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-secondary/20 rounded-full blur-[120px] mix-blend-screen animate-float [animation-delay:2s] z-0" />
 
-            <div className="container relative z-10 px-4">
+            <div className="container relative z-10 px-4 max-w-7xl mx-auto overflow-hidden">
                 <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
 
                     {/* Left Column: Text Content */}
@@ -66,8 +65,8 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                             className="font-bold mb-6 tracking-tight leading-tight"
                         >
                             <span className="block mb-3 text-xl md:text-3xl text-muted-foreground font-light">{greeting || "Hello"}, I&apos;m</span>
-                            <span className="block text-4xl sm:text-5xl md:text-7xl h-auto min-h-[1.2em] font-extrabold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60 break-words px-2 lg:px-0">
-                                <Typewriter words={["Ernest", "Kojo", "Owusu", "Essien", "Ernest Kojo Owusu Essien"]} />
+                            <span className="block text-4xl sm:text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
+                                Ernest Essien
                             </span>
                         </motion.h1>
 
@@ -127,13 +126,13 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 1, delay: 0.4 }}
-                        className="flex-1 relative w-full max-w-md lg:max-w-lg aspect-[3/4] lg:h-[600px] flex items-end justify-center mt-8 lg:mt-12"
+                        className="flex-1 relative w-full max-w-xs lg:max-w-sm aspect-[3/4] lg:h-[400px] flex items-end justify-center mt-8 lg:mt-12"
                     >
                         {/* Rim Light Effect behind the subject */}
                         <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-60 blur-3xl z-0" />
 
-                        {/* Image Container with Gradient Masks */}
-                        <div className="relative w-full h-full z-10 rounded-3xl overflow-hidden lg:overflow-visible">
+                        {/* Image Container with Blob Shape */}
+                        <div className="relative w-full h-full z-10 overflow-hidden" style={{ borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%" }}>
                             <AnimatePresence mode="popLayout">
                                 <motion.div
                                     key={currentImageIndex}
@@ -151,7 +150,10 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
                                         src={heroImages[currentImageIndex]}
                                         alt="Hero Portrait"
                                         fill
-                                        className={`object-cover ${currentImageIndex === 3 ? 'object-center' : 'object-top'}`}
+                                        className={`object-cover ${currentImageIndex === 2 ? 'object-[center_60%]' : // Pulls hero-3.png up
+                                                currentImageIndex === 3 ? 'object-center' :
+                                                    'object-top'
+                                            }`}
                                         priority
                                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />

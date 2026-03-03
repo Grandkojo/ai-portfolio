@@ -4,9 +4,11 @@ import { revalidateExperience } from "@/app/actions";
 import { ExperienceForm } from "@/components/admin/experience-form";
 import { deleteExperience, Experience, subscribeToExperience } from "@/lib/db";
 import { Briefcase, Building2, Calendar, Edit2, MapPin, Plus, Trash2 } from "lucide-react";
+import { useNotification } from "@/components/ui/notification-context";
 import { useEffect, useState } from "react";
 
 export default function AdminExperience() {
+    const { showNotification, confirmAction } = useNotification();
     const [experience, setExperience] = useState<Experience[]>([]);
     const [isEditing, setIsEditing] = useState(false);
     const [editingItem, setEditingItem] = useState<Experience | null>(null);
@@ -17,9 +19,21 @@ export default function AdminExperience() {
     }, []);
 
     const handleDelete = async (id: string, role: string) => {
-        if (confirm(`Are you sure you want to delete "${role}"?`)) {
-            await deleteExperience(id);
-            await revalidateExperience();
+        const confirmed = await confirmAction({
+            title: 'Delete Experience',
+            message: `Are you sure you want to delete "${role}"? This will remove it from your timeline.`,
+            confirmText: 'Delete',
+            type: 'danger'
+        });
+
+        if (confirmed) {
+            try {
+                await deleteExperience(id);
+                await revalidateExperience();
+                showNotification(`Deleted experience: ${role}`, "success");
+            } catch (error) {
+                showNotification("Failed to delete experience", "error");
+            }
         }
     };
 
