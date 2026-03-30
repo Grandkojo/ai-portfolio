@@ -32,6 +32,17 @@ export function HomeClient({ projects, skills, experience }: HomeClientProps) {
         }
     }, [searchParams]);
 
+    useEffect(() => {
+        const key = `visit-tracked-${new Date().toISOString().slice(0, 10)}`;
+        if (sessionStorage.getItem(key)) return;
+
+        fetch("/api/analytics/visit", { method: "POST" })
+            .then(() => sessionStorage.setItem(key, "1"))
+            .catch(() => {
+                // Ignore analytics failures.
+            });
+    }, []);
+
     const handleAskAI = (context: string) => {
         setChatContext(context);
         setIsChatOpen(true);
