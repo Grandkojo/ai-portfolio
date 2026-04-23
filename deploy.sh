@@ -35,16 +35,75 @@ echo "🏗️  Building Docker Image..."
 cp .env.local .env.production
 echo "📝 Created temporary .env.production for build..."
 
-gcloud builds submit --tag $REPO_NAME . --project=$PROJECT_ID
+BUILD_SUBMIT_OUTPUT="$(gcloud builds submit \
+  --tag "$REPO_NAME" \
+  . \
+  --project="$PROJECT_ID" \
+  --async \
+  --format='value(id)' 2>&1)"
+echo "$BUILD_SUBMIT_OUTPUT"
+
+BUILD_ID="$(printf '%s\n' "$BUILD_SUBMIT_OUTPUT" | sed -nE 's#^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$#\1#p' | head -n1)"
+
+if [ -z "$BUILD_ID" ]; then
+    BUILD_ID="$(printf '%s\n' "$BUILD_SUBMIT_OUTPUT" | sed -nE 's#.*builds/([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}).*#\1#p' | head -n1)"
+fi
+
+if [ -z "$BUILD_ID" ]; then
+    echo "❌ Failed to start Cloud Build (no build id returned)."
+    exit 1
+fi
+
+echo "🧾 Cloud Build started: $BUILD_ID"
+echo "⏱️  Polling build status with backoff..."
+
+POLL_SECONDS=10
+MAX_POLL_SECONDS=60
+
+while true; do
+    set +e
+    BUILD_STATUS_OUTPUT="$(gcloud builds describe "$BUILD_ID" --project="$PROJECT_ID" --format='value(status)' 2>&1)"
+    DESCRIBE_EXIT_CODE=$?
+    set -e
+
+    if [ $DESCRIBE_EXIT_CODE -ne 0 ]; then
+        if echo "$BUILD_STATUS_OUTPUT" | grep -Eq "RATE_LIMIT_EXCEEDED|quota|429|RESOURCE_EXHAUSTED"; then
+            echo "⚠️  Cloud Build API rate-limited. Retrying in ${POLL_SECONDS}s..."
+            sleep "$POLL_SECONDS"
+            POLL_SECONDS=$((POLL_SECONDS * 2))
+            if [ $POLL_SECONDS -gt $MAX_POLL_SECONDS ]; then
+                POLL_SECONDS=$MAX_POLL_SECONDS
+            fi
+            continue
+        fi
+
+        echo "❌ Failed to read build status:"
+        echo "$BUILD_STATUS_OUTPUT"
+        exit 1
+    fi
+
+    BUILD_STATUS="$(echo "$BUILD_STATUS_OUTPUT" | tr -d '\r\n')"
+    POLL_SECONDS=10
+
+    case "$BUILD_STATUS" in
+        SUCCESS)
+            echo "✅ Cloud Build completed successfully."
+            break
+            ;;
+        FAILURE|INTERNAL_ERROR|TIMEOUT|CANCELLED|EXPIRED)
+            echo "❌ Cloud Build ended with status: $BUILD_STATUS"
+            exit 1
+            ;;
+        *)
+            echo "⏳ Cloud Build status: $BUILD_STATUS. Checking again in ${POLL_SECONDS}s..."
+            sleep "$POLL_SECONDS"
+            ;;
+    esac
+done
 
 # Cleanup
 rm .env.production
 echo "🗑️  Removed temporary .env.production"
-
-if [ $? -ne 0 ]; then
-    echo "❌ Build failed! Aborting."
-    exit 1
-fi
 
 # 3. Deploy to Cloud Run
 echo "------------------------------------------------"
