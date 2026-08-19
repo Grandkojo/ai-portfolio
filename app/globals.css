@@ -2,70 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ═══════════════════════════════════════ */
+/* Portfolio v2 — Editorial Minimalist    */
+/* ═══════════════════════════════════════ */
+
 :root {
-  /* VOID ALCHEMIST THEME */
-
-  /* Background: Pure Void Black */
-  --background: #000000;
-  /* Text: Pure White */
-  --foreground: #ffffff;
-
-  /* Primary: Electric Violet (Magic) */
-  --primary: #8a2be2;
-  /* slightly brighter violet for better contrast on black */
-  --primary-foreground: #ffffff;
-
-  /* Secondary: Deep Indigo (The Abyss) */
-  --secondary: #0a0a1a;
-  --secondary-foreground: #e0aaff;
-
-  /* Accent: Neon Cyan (The Code) */
-  --accent: #00f0ff;
-  --accent-foreground: #000000;
-
-  /* Muted: Deep Purple Shadow */
-  --muted: #1a0b2e;
-  --muted-foreground: #d4cce0;
-  /* Brightened from #9485aa for better readability */
-
-  /* Cards: Obsidian Glass (Almost black, high gloss) */
-  --card: #050505;
-  --card-foreground: #ffffff;
-
-  --border: #331166;
+  --background: #FAFAF9;
+  --foreground: #0C0A09;
+  --muted: #F5F5F4;
+  --muted-foreground: #78716C;
+  --accent: #059669;
+  --accent-foreground: #FFFFFF;
+  --card: #FFFFFF;
+  --card-foreground: #0C0A09;
+  --border: #E7E5E4;
+  --primary: #059669;
+  --primary-foreground: #FFFFFF;
+  --secondary: #F5F5F4;
+  --secondary-foreground: #0C0A09;
+  --ring: #059669;
 }
+
+.dark {
+  --background: #0A0A0B;
+  --foreground: #FAFAFA;
+  --muted: #18181B;
+  --muted-foreground: #A1A1AA;
+  --accent: #10B981;
+  --accent-foreground: #FFFFFF;
+  --card: #141416;
+  --card-foreground: #FAFAFA;
+  --border: #27272A;
+  --primary: #10B981;
+  --primary-foreground: #FFFFFF;
+  --secondary: #27272A;
+  --secondary-foreground: #FAFAFA;
+  --ring: #10B981;
+}
+
+/* ── Base ──────────────────────────────── */
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-dm-sans), sans-serif;
-  -webkit-overflow-scrolling: touch;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-syne), sans-serif;
+/* ── Selection ─────────────────────────── */
+
+::selection {
+  background-color: var(--accent);
+  color: white;
 }
 
-/* Glassmorphism utilities */
-.glass {
-  background: rgba(16, 0, 43, 0.4);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
+/* ── Scrollbar ─────────────────────────── */
 
-.glass-card {
-  background: rgba(16, 0, 43, 0.6);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(123, 44, 191, 0.4);
-}
-
-/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
@@ -73,28 +74,23 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(123, 44, 191, 0.3);
+  background: var(--border);
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(123, 44, 191, 0.6);
+  background: var(--muted-foreground);
 }
 
-/* Utility for thinner scrollbar on specific elements */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
+/* ── Utility ───────────────────────────── */
+
+.text-balance {
+  text-wrap: balance;
 }
 
-/* Obsidian Glass Card - The Void Alchemist Standard */
-.obsidian-card {
-  @apply bg-[#050505]/90 backdrop-blur-md border border-white/20 shadow-2xl rounded-[2rem] relative overflow-hidden;
-}
-
-.obsidian-highlight {
-  @apply absolute inset-0 bg-gradient-to-br from-white/5 to-transparent opacity-0 transition-opacity duration-700 pointer-events-none z-10;
-}
-
-.obsidian-border {
-  @apply absolute inset-0 rounded-[2rem] ring-1 ring-white/20 transition-all duration-500 z-20 pointer-events-none;
+/* Prevent bottom nav overlap on mobile */
+@media (max-width: 767px) {
+  main {
+    padding-bottom: 6rem;
+  }
 }

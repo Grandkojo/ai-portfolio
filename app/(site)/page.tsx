@@ -1,6 +1,7 @@
 import { HomeClient } from "@/components/home-client";
 import { getCachedProjects, getCachedSkills, getCachedExperience } from "@/lib/cached-data";
 import { Project, Skill, Experience } from "@/lib/db";
+import { getFeaturedPosts } from "@/lib/blog-data";
 
 export const dynamic = 'force-dynamic';
 
@@ -23,13 +24,14 @@ export default async function Home() {
     console.error("Error fetching homepage data:", err);
   }
 
-
+  const featuredPosts = getFeaturedPosts();
 
   return (
     <HomeClient
       projects={projects}
       skills={skills}
       experience={experience}
+      featuredPosts={featuredPosts}
     />
   );
 }

@@ -1,4 +1,5 @@
 import { db } from "./firebase";
+
 import {
     collection,
     doc,
@@ -294,7 +295,7 @@ export const subscribeToMessages = (callback: (messages: Message[]) => void) => 
 };
 
 
-// --- FETCH (Server-Side) ---
+// --- FETCH (Client Fallbacks) ---
 
 export const getProjects = async (): Promise<Project[]> => {
     if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) return [];
@@ -310,7 +311,6 @@ export const getProjects = async (): Promise<Project[]> => {
 
 export const getProjectBySlug = async (slug: string): Promise<Project | null> => {
     if (!process.env.NEXT_PUBLIC_FIREBASE_API_KEY) {
-        // Mock fallback if keys missing
         const projects = await getProjects();
         return projects.find(p => p.slug === slug) || null;
     }
@@ -350,6 +350,9 @@ export const getExperience = async (): Promise<Experience[]> => {
         return [];
     }
 };
+
+
+
 
 // --- RATE LIMITING ---
 
