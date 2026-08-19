@@ -1,34 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Terminal, MessageSquare, Bot, Code2, Sparkles } from "lucide-react";
-import { Typewriter } from "./typewriter";
+import { ArrowRight, MessageSquare } from "lucide-react";
 import Image from "next/image";
-
-
-const heroImages = [
-    '/images/hero_portrait.jpg',
-    '/images/hero-2.jpg',
-    '/images/hero-3.png',
-    '/images/hero-4.jpg'
-];
 
 export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
     const [greeting, setGreeting] = useState("");
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-        }, 5000);
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        const hours = new Date().getHours();
-        const timeGreeting = hours < 12 ? "Good Morning" : hours < 18 ? "Good Afternoon" : "Good Evening";
-        setGreeting(timeGreeting);
+        const h = new Date().getHours();
+        setGreeting(h < 12 ? "Good Morning" : h < 18 ? "Good Afternoon" : "Good Evening");
     }, []);
 
     const scrollToProjects = () => {
@@ -36,135 +17,76 @@ export function Hero({ onOpenChat }: { onOpenChat: () => void }) {
     };
 
     return (
-        <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pb-32 pt-20 max-w-[100vw]">
-            {/* Background Effects */}
-            <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] mix-blend-screen animate-float z-0" />
-            <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-secondary/20 rounded-full blur-[120px] mix-blend-screen animate-float [animation-delay:2s] z-0" />
+        <section
+            id="home"
+            className="relative min-h-0 md:min-h-[100dvh] flex items-start md:items-center pt-44 pb-16 md:pt-0 md:pb-0"
+        >
+            <div className="w-full max-w-5xl mx-auto px-5 md:px-6">
+                <div className="flex flex-row items-start md:items-center justify-between gap-6 md:gap-16">
+                    {/* ── Text ──────────────────────── */}
+                    <div className="flex-1 text-left">
+                        <p className="text-sm text-muted-foreground mb-4 animate-fade-in">
+                            {greeting || "Hello"}, I&apos;m
+                        </p>
 
-            <div className="container relative z-10 px-4 max-w-7xl mx-auto overflow-hidden">
-                <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-
-                    {/* Left Column: Text Content */}
-                    <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5 }}
-                            className="mb-8"
+                        <h1
+                            className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-5 animate-slide-up"
+                            style={{ animationDelay: "0.1s", animationFillMode: "backwards" }}
                         >
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/20 bg-primary/5 backdrop-blur-sm text-sm text-primary-foreground/80 shadow-[0_0_15px_rgba(138,43,226,0.1)]">
-                                <Terminal size={14} />
-                                <span className="font-mono">AI-Powered Portfolio</span>
-                            </div>
-                        </motion.div>
+                            Ernest Essien
+                        </h1>
 
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.2 }}
-                            className="font-bold mb-6 tracking-tight leading-tight"
+                        <p
+                            className="text-sm md:text-lg text-muted-foreground max-w-lg leading-relaxed text-balance animate-slide-up"
+                            style={{ animationDelay: "0.25s", animationFillMode: "backwards" }}
                         >
-                            <span className="block mb-3 text-xl md:text-3xl text-muted-foreground font-light">{greeting || "Hello"}, I&apos;m</span>
-                            <span className="block text-4xl sm:text-5xl md:text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-b from-white to-white/60">
-                                Ernest Essien
-                            </span>
-                        </motion.h1>
-
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.4 }}
-                            className="text-base md:text-xl text-muted-foreground mb-10 max-w-2xl leading-relaxed mx-5 lg:mx-0"
-                        >
-                            Software Engineer specializing in <span className="text-white font-medium">Backend Systems</span> & <span className="text-white font-medium">AI</span>.
-                            <br className="hidden md:block" />
-                            <span className="inline-block mt-2">Crafting intelligent solutions where code meets creativity.</span>
-                        </motion.p>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.8, delay: 0.6 }}
-                            className="flex flex-col sm:flex-row gap-4 w-[85%]"
-                        >
-                            <motion.button
-                                onClick={onOpenChat}
-                                animate={{
-                                    boxShadow: [
-                                        "0 0 0px rgba(157,78,221,0)",
-                                        "0 0 20px rgba(157,78,221,0.4)",
-                                        "0 0 0px rgba(157,78,221,0)"
-                                    ]
-                                }}
-                                transition={{
-                                    duration: 3,
-                                    repeat: Infinity,
-                                    repeatType: "reverse",
-                                    ease: "easeInOut"
-                                }}
-                                whileHover={{ scale: 1.05, boxShadow: "0 0 40px rgba(157,78,221,0.6)" }}
-                                whileTap={{ scale: 0.95 }}
-                                className="group relative px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-primary text-white font-bold flex items-center justify-center gap-2 overflow-hidden"
-                            >
-                                <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-                                <Bot size={20} className="animate-bounce" />
-                                Chat with my AI
-                            </motion.button>
-                            <button
-                                onClick={scrollToProjects}
-                                className="group px-6 py-3 sm:px-8 sm:py-4 rounded-full bg-white/5 border border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm flex items-center justify-center gap-2 hover:border-primary/50"
-                            >
-                                <Code2 size={20} />
-                                View Projects
-                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                            </button>
-                        </motion.div>
+                            Software Engineer specializing in{" "}
+                            <span className="text-foreground font-medium">Backend Systems</span> &{" "}
+                            <span className="text-foreground font-medium">AI</span>.
+                            Building intelligent solutions where code meets creativity.
+                        </p>
                     </div>
 
-                    {/* Right Column: The Void Walker Portrait */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 1, delay: 0.4 }}
-                        className="flex-1 relative w-full max-w-xs lg:max-w-sm aspect-[3/4] lg:h-[400px] flex items-end justify-center mt-8 lg:mt-12"
+                    {/* ── Portrait ──────────────────── */}
+                    <div
+                        className="relative w-20 h-20 sm:w-28 sm:h-28 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-full overflow-hidden
+                                    ring-1 ring-border animate-fade-in flex-shrink-0"
+                        style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}
                     >
-                        {/* Rim Light Effect behind the subject */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-60 blur-3xl z-0" />
+                        <Image
+                            src="/images/hero-3.png"
+                            alt="Ernest Essien"
+                            fill
+                            className="object-cover object-[center_30%]"
+                            priority
+                            sizes="(max-width: 768px) 80px, 256px"
+                        />
+                    </div>
+                </div>
 
-                        {/* Image Container with Blob Shape */}
-                        <div className="relative w-full h-full z-10 overflow-hidden" style={{ borderRadius: "60% 40% 30% 70% / 60% 30% 70% 40%" }}>
-                            <AnimatePresence mode="popLayout">
-                                <motion.div
-                                    key={currentImageIndex}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 1 }}
-                                    className="absolute inset-0 z-10"
-                                    style={{
-                                        maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)",
-                                        WebkitMaskImage: "linear-gradient(to bottom, black 60%, transparent 100%)"
-                                    }}
-                                >
-                                    <Image
-                                        src={heroImages[currentImageIndex]}
-                                        alt="Hero Portrait"
-                                        fill
-                                        className={`object-cover ${currentImageIndex === 2 ? 'object-[center_60%]' : // Pulls hero-3.png up
-                                                currentImageIndex === 3 ? 'object-center' :
-                                                    'object-top'
-                                            }`}
-                                        priority
-                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    />
-                                </motion.div>
-                            </AnimatePresence>
-
-                            {/* Overlay to darken and tint the image slightly to fit the void */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-20" />
-                            <div className="absolute inset-0 bg-primary/5 mix-blend-overlay z-20" />
-                        </div>
-                    </motion.div>
+                {/* ── CTA Buttons ──────────────────── */}
+                <div
+                    className="flex flex-col sm:flex-row gap-3 mt-8 animate-slide-up md:justify-start"
+                    style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}
+                >
+                    <button
+                        onClick={onOpenChat}
+                        className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full
+                                   bg-accent text-accent-foreground text-sm font-medium
+                                   hover:opacity-90 transition-opacity duration-200"
+                    >
+                        <MessageSquare size={15} />
+                        Chat with Essy AI
+                    </button>
+                    <button
+                        onClick={scrollToProjects}
+                        className="group inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full
+                                   border border-border text-sm font-medium text-foreground
+                                   hover:bg-muted transition-colors duration-200"
+                    >
+                        View Work
+                        <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                    </button>
                 </div>
             </div>
         </section>

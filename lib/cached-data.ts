@@ -1,5 +1,6 @@
 import { unstable_cache } from "next/cache";
-import { getProjects, getSkills, getExperience } from "@/lib/db";
+import { getProjects, getSkills, getExperience } from "@/lib/db-server";
+
 
 export const getCachedProjects = unstable_cache(
     async () => getProjects(),

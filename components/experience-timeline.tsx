@@ -1,113 +1,99 @@
+"use client";
+
 import { Experience } from "@/lib/db";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { Briefcase, Calendar, MapPin } from "lucide-react";
-import { useRef } from "react";
+import { ScrollReveal } from "@/components/scroll-reveal";
 
-interface ExperienceTimelineProps {
-    experience: Experience[];
-}
-
-export function ExperienceTimeline({ experience }: ExperienceTimelineProps) {
-    const timelineItems = experience.filter(item => !item.type || item.type === 'Experience');
-
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start end", "end start"],
-    });
-
-    const y = useTransform(scrollYProgress, [0, 1], [100, -100]);
+export function ExperienceTimeline({ experience }: { experience: Experience[] }) {
+    const workExperience = experience.filter((e) => e.type === "Experience");
+    const education = experience.filter((e) => e.type === "Education" || e.type === "Certification");
 
     return (
-        <section id="about" ref={containerRef} className="relative py-32 container mx-auto px-4 overflow-hidden">
-            {/* Background Interactivity - Parallax Blobs */}
-            <motion.div
-                style={{ y }}
-                className="absolute top-0 right-0 w-[800px] h-[800px] bg-primary/10 rounded-full blur-[120px] -z-10"
-            />
-            <motion.div
-                style={{ y: useTransform(scrollYProgress, [0, 1], [-100, 100]) }}
-                className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-accent/10 rounded-full blur-[100px] -z-10"
-            />
+        <section id="experience" className="py-20 md:py-28">
+            <div className="max-w-5xl mx-auto px-5 md:px-6">
+                {/* ── Experience ────────────── */}
+                {workExperience.length > 0 && (
+                    <>
+                        <ScrollReveal>
+                            <div className="flex items-center gap-4 mb-10">
+                                <h2 className="text-lg font-medium text-foreground">Experience</h2>
+                                <div className="flex-1 h-px bg-border" />
+                            </div>
+                        </ScrollReveal>
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="text-center mb-24"
-            >
-                <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60">
-                    My Journey
-                </h2>
-                <div className="h-1 w-24 bg-primary mx-auto rounded-full" />
-            </motion.div>
+                        <div className="space-y-8 mb-20">
+                            {workExperience.map((exp, i) => (
+                                <ScrollReveal key={exp.id || exp.role} delay={i * 0.08}>
+                                    <div className="group">
+                                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 mb-2">
+                                            <h3 className="text-base font-medium text-foreground">
+                                                {exp.role}
+                                            </h3>
+                                            <span className="text-sm text-accent">{exp.company}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-xs text-muted-foreground mb-3">
+                                            <span>{exp.period}</span>
+                                            {exp.location && (
+                                                <>
+                                                    <span className="w-1 h-1 rounded-full bg-border" />
+                                                    <span>{exp.location}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                        {exp.description.length > 0 && (
+                                            <ul className="space-y-1.5">
+                                                {exp.description.map((d, i) => (
+                                                    <li
+                                                        key={i}
+                                                        className="text-sm text-muted-foreground leading-relaxed pl-4 relative before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-px before:bg-border"
+                                                    >
+                                                        {d}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        )}
+                                    </div>
+                                </ScrollReveal>
+                            ))}
+                        </div>
+                    </>
+                )}
 
+                {/* ── Education ─────────────── */}
+                {education.length > 0 && (
+                    <>
+                        <ScrollReveal>
+                            <div className="flex items-center gap-4 mb-10">
+                                <h2 className="text-lg font-medium text-foreground">Education</h2>
+                                <div className="flex-1 h-px bg-border" />
+                            </div>
+                        </ScrollReveal>
 
-            <div className="max-w-5xl mx-auto space-y-24">
-                {timelineItems.map((exp, index) => (
-                    <TimelineCard key={exp.id || index} exp={exp} index={index} total={timelineItems.length} />
-                ))}
+                        <div className="space-y-6">
+                            {education.map((edu, i) => (
+                                <ScrollReveal key={edu.id || edu.role} delay={i * 0.08}>
+                                    <div>
+                                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4 mb-1">
+                                            <h3 className="text-base font-medium text-foreground">
+                                                {edu.role}
+                                            </h3>
+                                            <span className="text-sm text-accent">{edu.company}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                                            <span>{edu.period}</span>
+                                            {edu.location && (
+                                                <>
+                                                    <span className="w-1 h-1 rounded-full bg-border" />
+                                                    <span>{edu.location}</span>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </ScrollReveal>
+                            ))}
+                        </div>
+                    </>
+                )}
             </div>
         </section>
-    );
-}
-
-function TimelineCard({ exp, index, total }: { exp: Experience; index: number; total: number }) {
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="group relative"
-        >
-            {/* Connecting Line (Visual only) */}
-            {index !== total - 1 && (
-                <div className="absolute left-8 top-20 bottom-[-6rem] w-0.5 bg-white/10 hidden md:block group-last:hidden" />
-            )}
-
-            <div className="flex flex-col md:flex-row gap-8 md:gap-12">
-                {/* Visual Anchor */}
-                <div className="md:w-64 flex-shrink-0 flex flex-col items-start md:text-right md:items-end pt-2">
-                    <span className="text-5xl font-bold text-accent mb-2 font-mono drop-shadow-[0_0_10px_rgba(0,240,255,0.3)]">0{index + 1}</span>
-                    <div className="text-xl font-bold text-white mb-1">{exp.period}</div>
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <MapPin size={14} />
-                        {exp.location}
-                    </div>
-                </div>
-
-                {/* Content Card */}
-                <div className="flex-1">
-                    <div className="obsidian-card p-6 md:p-10 group-hover:-translate-y-2 transition-transform duration-500">
-                        {/* Obsidian Effects */}
-                        <div className="obsidian-highlight group-hover:opacity-100" />
-                        <div className="obsidian-border group-hover:ring-primary/30" />
-
-                        <div className="relative z-30">
-                            <div className="flex items-center gap-4 mb-6">
-                                <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center text-primary border border-primary/20 shadow-inner">
-                                    <Briefcase size={24} />
-                                </div>
-                                <div>
-                                    <h3 className="text-3xl font-bold text-white mb-1 group-hover:text-primary transition-colors duration-300">
-                                        {exp.role}
-                                    </h3>
-                                    <p className="text-xl text-white/90 font-medium">{exp.company}</p>
-                                </div>
-                            </div>
-
-                            <div className="space-y-4 text-base md:text-lg text-gray-200 leading-relaxed text-justify">
-                                {exp.description.map((paragraph, i) => (
-                                    <p key={i} className="border-l-2 border-primary/30 pl-4">
-                                        {paragraph}
-                                    </p>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </motion.div>
     );
 }

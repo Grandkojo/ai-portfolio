@@ -11,24 +11,21 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-// Enable verbose logging to see why it hangs
-// setLogLevel('debug'); // Commented out for production
+const hasApiKey = Boolean(process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
 
-// console.log("Firebase Config Check:", {
-//     apiKey: firebaseConfig.apiKey ? "Present" : "MISSING",
-//     projectId: firebaseConfig.projectId,
-//     authDomain: firebaseConfig.authDomain
-// });
+// Initialize Firebase (Singleton pattern safely)
+const app = hasApiKey
+    ? (!getApps().length ? initializeApp(firebaseConfig) : getApp())
+    : null;
 
-// Initialize Firebase (Singleton pattern)
-const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
-
-// Force long polling to avoid WebSocket issues (common cause of hangs)
 // Connecting to named database 'ai-portfolio' as created by user
-const db = initializeFirestore(app, {
-    experimentalForceLongPolling: true,
-}, "ai-portfolio");
+const db = app
+    ? initializeFirestore(app, { experimentalForceLongPolling: true }, "ai-portfolio")
+    : ({} as any);
 
-const auth = getAuth(app);
+const auth = app
+    ? getAuth(app)
+    : ({} as any);
 
 export { db, auth };
+
