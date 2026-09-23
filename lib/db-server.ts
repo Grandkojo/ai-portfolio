@@ -18,8 +18,13 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
     try {
         const adminDb = getPortfolioAdminDb();
         const docSnap = await adminDb.collection("projects").doc(slug).get();
-        if (!docSnap.exists) return null;
-        return { id: docSnap.id, ...docSnap.data() } as Project;
+        if (docSnap.exists) return { id: docSnap.id, ...docSnap.data() } as Project;
+
+        // Projects created via the admin site may have auto-generated IDs; fall back to the slug field
+        const snapshot = await adminDb.collection("projects").where("slug", "==", slug).limit(1).get();
+        if (snapshot.empty) return null;
+        const match = snapshot.docs[0];
+        return { id: match.id, ...match.data() } as Project;
     } catch (e) {
         console.error(`Error fetching project by slug ${slug} via Admin SDK:`, e);
         return null;

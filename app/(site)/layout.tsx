@@ -23,6 +23,24 @@ export const metadata: Metadata = {
     title: "Ernest Essien — Software Engineer & AI",
     description:
         "Software Engineer specializing in Backend Systems & AI. Building intelligent solutions where code meets creativity.",
+    openGraph: {
+        title: "Ernest Essien — Software Engineer & AI",
+        description: "Software Engineer specializing in Backend Systems & AI.",
+        images: [
+            {
+                url: "/og-light.png",
+                width: 1200,
+                height: 630,
+                alt: "Ernest Essien — Software Engineer & AI",
+            },
+        ],
+    },
+    twitter: {
+        card: "summary_large_image",
+        title: "Ernest Essien — Software Engineer & AI",
+        description: "Software Engineer specializing in Backend Systems & AI.",
+        images: ["/og-light.png"],
+    },
 };
 
 export default function RootLayout({
