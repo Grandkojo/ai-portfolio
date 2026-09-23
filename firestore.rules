@@ -41,6 +41,12 @@ service cloud.firestore {
       allow write: if isAuthenticated();
     }
     
+    // Posts (Writing): Public Read, Admin Write
+    match /posts/{postID} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
     // Analytics: Public Read, Admin Write (with strict public increment for site_stats)
     match /analytics/{docID} {
       allow read: if true;

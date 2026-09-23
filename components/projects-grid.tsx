@@ -20,9 +20,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             >
                 {/* ── Header ─────────── */}
                 <div className="flex items-start justify-between mb-3">
-                    <h3 className="text-base font-medium text-card-foreground group-hover:text-accent transition-colors duration-200 leading-snug">
-                        {project.title}
-                    </h3>
+                    <div className="flex items-center gap-2 min-w-0">
+                        {project.showImageOnCard && project.imageUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                                src={project.imageUrl}
+                                alt=""
+                                className="h-5 w-5 flex-shrink-0 rounded object-cover"
+                                loading="lazy"
+                            />
+                        )}
+                        <h3 className="text-base font-medium text-card-foreground group-hover:text-accent transition-colors duration-200 leading-snug">
+                            {project.title}
+                        </h3>
+                    </div>
                     <div className="flex items-center gap-2 ml-3 flex-shrink-0">
                         {project.githubUrl && (
                             <a

@@ -1,5 +1,6 @@
 import { getPortfolioAdminDb } from "./firebase-admin";
 import { Project, Skill, Experience } from "./db";
+import { BlogPost } from "./blog-data";
 
 // --- FETCH (Server-Side using Firebase Admin SDK) ---
 
@@ -27,6 +28,29 @@ export const getProjectBySlug = async (slug: string): Promise<Project | null> =>
         return { id: match.id, ...match.data() } as Project;
     } catch (e) {
         console.error(`Error fetching project by slug ${slug} via Admin SDK:`, e);
+        return null;
+    }
+};
+
+export const getPosts = async (): Promise<BlogPost[]> => {
+    try {
+        const adminDb = getPortfolioAdminDb();
+        const snapshot = await adminDb.collection("posts").orderBy("date", "desc").get();
+        return snapshot.docs.map(doc => ({ ...doc.data(), slug: doc.id } as BlogPost));
+    } catch (e) {
+        console.error("Error fetching posts via Admin SDK:", e);
+        return [];
+    }
+};
+
+export const getPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+    try {
+        const adminDb = getPortfolioAdminDb();
+        const docSnap = await adminDb.collection("posts").doc(slug).get();
+        if (!docSnap.exists) return null;
+        return { ...docSnap.data(), slug: docSnap.id } as BlogPost;
+    } catch (e) {
+        console.error(`Error fetching post by slug ${slug} via Admin SDK:`, e);
         return null;
     }
 };

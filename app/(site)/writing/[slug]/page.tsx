@@ -1,14 +1,9 @@
-import { getPostBySlug, getAllPosts } from "@/lib/blog-data";
+import { getPostBySlug } from "@/lib/db-server";
 import { notFound } from "next/navigation";
 import { BlogDetailClient } from "./blog-detail-client";
 
-export async function generateStaticParams() {
-    const posts = getAllPosts();
-    return posts.map((post) => ({ slug: post.slug }));
-}
-
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-    const post = getPostBySlug(params.slug);
+    const post = await getPostBySlug(params.slug);
     if (!post) return { title: "Post Not Found" };
 
     return {
@@ -17,8 +12,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-    const post = getPostBySlug(params.slug);
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+    const post = await getPostBySlug(params.slug);
 
     if (!post) {
         notFound();

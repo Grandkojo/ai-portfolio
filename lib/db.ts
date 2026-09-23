@@ -49,6 +49,7 @@ export interface Project {
     subtitle?: string;
     description: string;
     imageUrl: string;
+    showImageOnCard?: boolean;
     projectUrl: string;
     githubUrl: string;
     tech: string[];

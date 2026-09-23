@@ -5,6 +5,28 @@ import { Send, CheckCircle } from "lucide-react";
 import { addMessage } from "@/lib/db";
 import { ScrollReveal } from "@/components/scroll-reveal";
 
+async function sendEmail(form: { name: string; email: string; message: string }) {
+    const accessKey = process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY;
+    if (!accessKey) throw new Error("NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY is missing");
+
+    const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+            access_key: accessKey,
+            subject: `Portfolio contact from ${form.name}`,
+            from_name: "Portfolio Contact Form",
+            name: form.name,
+            email: form.email,
+            message: form.message,
+        }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.success) {
+        throw new Error(data.message || `Web3Forms request failed: ${response.status}`);
+    }
+}
+
 export function ContactSection() {
     const [form, setForm] = useState({ name: "", email: "", message: "" });
     const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -15,11 +37,18 @@ export function ContactSection() {
 
         setStatus("sending");
         try {
-            await addMessage({
-                name: form.name,
-                email: form.email,
-                message: form.message,
-            });
+            // Save to Firestore (shown in the admin Messages tab) and email via Web3Forms.
+            // Web3Forms' free plan only accepts browser-side submissions, so this can't move to a server action.
+            const [saved, emailed] = await Promise.allSettled([
+                addMessage({
+                    name: form.name,
+                    email: form.email,
+                    message: form.message,
+                }),
+                sendEmail(form),
+            ]);
+            if (emailed.status === "rejected") console.error("Web3Forms error:", emailed.reason);
+            if (saved.status === "rejected" && emailed.status === "rejected") throw emailed.reason;
             setStatus("sent");
             setForm({ name: "", email: "", message: "" });
             setTimeout(() => setStatus("idle"), 4000);
